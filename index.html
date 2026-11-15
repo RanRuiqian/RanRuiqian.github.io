@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ran Ruiqian · 作品集 Portfolio</title>
+<style>
+/* Layout idea: an engineering drawing sheet. Hairline frames, a title block on every project, a reticle in the hero. Monochrome only. */
+:root{
+  --bg:#fafaf8; --ink:#111110; --mute:#5f5f5b; --rule:#cdcdc8; --tint:#efefeb;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Songti SC","Noto Serif CJK SC","Source Han Serif SC","Noto Serif SC","SimSun",Georgia,"Times New Roman",serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono","PingFang SC","Microsoft YaHei",monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#0e0e0d;--ink:#ecece8;--mute:#a0a09a;--rule:#34342f;--tint:#181816;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#0e0e0d;--ink:#ecece8;--mute:#a0a09a;--rule:#34342f;--tint:#181816;color-scheme:dark}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.7 var(--serif);font-feature-settings:"kern","liga";-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+b{font-weight:600}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.mute{color:var(--mute)}
+
+/* header */
+.site{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px solid var(--ink)}
+.site .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:56px}
+.brand{font:500 13px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;text-decoration:none}
+.site nav{display:flex;align-items:center;gap:clamp(12px,3vw,28px)}
+.site nav a,.site nav button{font:400 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--mute);background:none;border:0;padding:6px 0;cursor:pointer}
+.site nav a:hover,.site nav button:hover,.site nav a[aria-current="page"]{color:var(--ink)}
+.site nav a[aria-current="page"]{border-bottom:1px solid var(--ink)}
+.site nav .lang{color:var(--ink);border:1px solid var(--ink);padding:6px 10px}
+.site nav .lang:hover{background:var(--ink);color:var(--bg)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.95fr);gap:clamp(24px,5vw,64px);align-items:center;padding:clamp(36px,7vw,80px) 0 clamp(28px,5vw,56px)}
+.kicker{margin:0 0 20px;color:var(--mute)}
+.hero h1{margin:0;font-weight:300;font-size:clamp(56px,11.5vw,128px);line-height:.92;letter-spacing:-.035em;text-wrap:balance}
+.hero .lead{margin:28px 0 0;max-width:34em;font-size:clamp(18px,2.2vw,22px);line-height:1.55;text-wrap:pretty}
+.hero .lead2{margin:14px 0 0;max-width:36em;color:var(--mute);font-size:16px;line-height:1.65}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{display:inline-block;font:500 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1px solid var(--ink);padding:14px 18px;background:var(--bg);color:var(--ink);cursor:pointer}
+.btn:hover{background:var(--ink);color:var(--bg)}
+.btn.solid{background:var(--ink);color:var(--bg)}
+.btn.solid:hover{background:var(--bg);color:var(--ink)}
+.reticle{width:100%;height:auto;display:block;color:var(--ink)}
+.reticle-cap{margin:8px 0 0;color:var(--mute);font:400 11px/1.6 var(--mono);letter-spacing:.04em}
+
+/* facts */
+.facts{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.fact{padding:22px 20px 22px 0;border-left:1px solid var(--rule);padding-left:20px}
+.fact:first-child{border-left:0;padding-left:0}
+.fact .v{display:block;font-size:clamp(28px,3.6vw,42px);line-height:1.1;font-weight:400;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.fact .l{display:block;margin-top:8px;font-size:14px;line-height:1.45;color:var(--mute)}
+
+/* section heads */
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:clamp(48px,8vw,88px) 0 0;padding-bottom:12px;border-bottom:1px solid var(--ink)}
+.sh h2{margin:0;font-weight:400;font-size:clamp(26px,3.4vw,38px);line-height:1.15;letter-spacing:-.015em}
+.sh .mono{color:var(--mute)}
+
+/* project index */
+.grp{margin:28px 0 0;color:var(--mute)}
+.idx{border-top:1px solid var(--rule);margin-top:10px}
+.idx a{display:grid;grid-template-columns:56px minmax(0,1fr) 200px 120px 28px;gap:16px;align-items:baseline;padding:20px 0;border-bottom:1px solid var(--rule);text-decoration:none;transition:background .15s,color .15s,padding .15s}
+.idx a:hover,.idx a:focus-visible{background:var(--ink);color:var(--bg);padding-left:14px;padding-right:14px}
+.idx a:hover .mute,.idx a:focus-visible .mute{color:var(--bg);opacity:.75}
+.idx .n{font:400 13px/1 var(--mono);color:var(--mute)}
+.idx a:hover .n{color:var(--bg)}
+.idx .t{font-size:clamp(20px,2.4vw,26px);line-height:1.25;letter-spacing:-.01em}
+.idx .t small{display:block;margin-top:4px;font-size:14px;line-height:1.5;color:var(--mute)}
+.idx a:hover .t small{color:var(--bg);opacity:.75}
+.idx .k,.idx .d{font:400 12px/1.5 var(--mono);letter-spacing:.04em;color:var(--mute)}
+.idx a:hover .k,.idx a:hover .d{color:var(--bg);opacity:.8}
+.idx .ar{font:400 16px/1 var(--mono);text-align:right}
+
+.gl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--rule);margin-top:20px}
+.gl>div{padding:18px 20px 18px 0;border-bottom:1px solid var(--rule)}
+.gl .lb{display:block;font:500 11px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:8px}
+.gl .vl{display:block;font-size:15.5px;line-height:1.6}
+/* two-column blocks */
+.cols{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(24px,5vw,72px);margin-top:28px}
+.cols p{margin:0 0 14px;max-width:38em;text-wrap:pretty}
+
+/* rows (education, experience) */
+.rows{border-top:1px solid var(--rule)}
+.row{display:grid;grid-template-columns:150px minmax(0,1fr);gap:20px;padding:16px 0;border-bottom:1px solid var(--rule)}
+.row .d{font:400 12px/1.7 var(--mono);letter-spacing:.04em;color:var(--mute)}
+.row b{font-weight:600}
+.row p{margin:2px 0 0;color:var(--mute);font-size:15.5px;line-height:1.6}
+
+/* tables */
+.figs{display:grid;gap:22px}.figs.c2{grid-template-columns:1fr 1fr}.figs figure{margin:0}.figs:not(.c2) figure.sm img{max-width:520px}.figs img{display:block;width:100%;height:auto;border:1px solid var(--rule);background:#fff}.figs figcaption{font:400 12.5px/1.55 var(--mono);color:var(--mute);margin-top:8px}@media(max-width:700px){.figs.c2{grid-template-columns:1fr}}
+.tbl{width:100%;border-collapse:collapse;margin:6px 0 0;font-size:15.5px;line-height:1.55}
+.tbl th{font:500 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--mute);text-align:left;padding:0 16px 8px 0;border-bottom:1px solid var(--ink)}
+.tbl td{padding:10px 16px 10px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.tbl td.num{font-family:var(--mono);font-size:13.5px;white-space:nowrap}
+.scroll{overflow-x:auto}
+.sk{min-width:720px}.sk th:first-child,.sk td:first-child{width:150px}.sk th:last-child,.sk td:last-child{width:150px}
+
+/* project page */
+.back{display:inline-block;margin-top:28px;color:var(--mute);text-decoration:none}
+.back:hover{color:var(--ink)}
+.ph{padding:20px 0 0}
+.ph h1{margin:10px 0 0;font-weight:300;font-size:clamp(36px,6.4vw,72px);line-height:1.05;letter-spacing:-.025em;text-wrap:balance}
+.ph .lead{margin:18px 0 0;max-width:38em;font-size:clamp(18px,2vw,21px);line-height:1.55;text-wrap:pretty}
+.tb{display:grid;grid-template-columns:repeat(6,1fr);margin-top:32px;border:1px solid var(--ink)}
+.tb>div{padding:12px 14px 14px;border-left:1px solid var(--ink);border-top:1px solid var(--ink);min-width:0}
+.tb>div:nth-child(-n+6){border-top:0}
+.tb>div:first-child{border-left:0}
+.tb .lb{display:block;font:400 10.5px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
+.tb .vl{display:block;font-size:15px;line-height:1.45;overflow-wrap:anywhere}
+.tb .w2{grid-column:span 2}
+.tb .w3{grid-column:span 3}
+.tb .w6{grid-column:1/-1}
+.sec{display:grid;grid-template-columns:200px minmax(0,1fr);gap:clamp(16px,4vw,56px);padding:36px 0;border-bottom:1px solid var(--rule)}
+.sec>h2{margin:0;font:500 12px/1.6 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.sec>h2 span{display:block;color:var(--ink);font-size:13px}
+.sec .body{min-width:0;max-width:44em}
+.sec .body p{margin:0 0 14px;text-wrap:pretty}
+.sec .body.wide{max-width:none}
+ul.ls{list-style:none;margin:0;padding:0}
+ul.ls li{position:relative;padding:0 0 12px 22px;text-wrap:pretty}
+ul.ls li:before{content:"";position:absolute;left:0;top:.82em;width:10px;border-top:1px solid var(--ink)}
+.tl{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+.tl li{display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;padding:12px 0;border-bottom:1px solid var(--rule)}
+.tl .d{font:400 12px/1.8 var(--mono);letter-spacing:.04em;color:var(--mute)}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tags span{font:400 11.5px/1 var(--mono);letter-spacing:.04em;border:1px solid var(--ink);padding:7px 9px}
+.dia{border:1px solid var(--rule);background:var(--tint);padding:14px}
+.dia svg{display:block;width:100%;min-width:680px;height:auto}
+.dia-cap{margin:10px 0 0;font:400 11.5px/1.6 var(--mono);color:var(--mute);letter-spacing:.03em}
+.note{color:var(--mute);font-size:15.5px}
+.linkline a{font:500 12.5px/1.6 var(--mono);letter-spacing:.03em;text-underline-offset:4px}
+
+.pn{display:grid;grid-template-columns:1fr 1fr;margin-top:48px;border-top:1px solid var(--ink)}
+.pn a{display:block;padding:22px 0;text-decoration:none}
+.pn a:last-child{text-align:right}
+.pn a:hover .t{text-decoration:underline;text-underline-offset:5px}
+.pn .t{display:block;margin-top:6px;font-size:clamp(18px,2.2vw,24px);line-height:1.3}
+
+/* contact + footer */
+.contact{margin-top:clamp(56px,9vw,104px);border-top:1px solid var(--ink);padding-top:28px}
+.contact h2{margin:0;font-weight:300;font-size:clamp(32px,5vw,56px);line-height:1.05;letter-spacing:-.025em}
+.cgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:28px;border-top:1px solid var(--rule)}
+.cgrid>div{padding:16px 16px 16px 0;border-bottom:1px solid var(--rule)}
+.cgrid .lb{display:block;font:400 10.5px/1.4 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
+.cgrid .vl{display:block;font-size:16px;overflow-wrap:anywhere}
+footer.foot{padding:24px 0 56px;color:var(--mute);font-size:14px;line-height:1.7;max-width:46em}
+
+@media (max-width:900px){
+  .gl{grid-template-columns:1fr 1fr}
+  .hero{grid-template-columns:1fr}
+  .reticle-box{max-width:420px}
+  .facts{grid-template-columns:1fr 1fr}
+  .fact:nth-child(3){border-left:0;padding-left:0}
+  .fact:nth-child(n+3){border-top:1px solid var(--rule)}
+  .cols{grid-template-columns:1fr}
+  .tb{grid-template-columns:repeat(2,1fr)}
+  .tb>div,.tb>div:first-child{border-left:0;border-top:1px solid var(--ink)}
+  .tb>div:nth-child(2n){border-left:1px solid var(--ink)}
+  .tb>div:nth-child(-n+2){border-top:0}
+  .tb .w2,.tb .w3,.tb .w6{grid-column:1/-1;border-left:0!important}
+  .sec{grid-template-columns:1fr;gap:10px}
+  .idx a{grid-template-columns:40px minmax(0,1fr) 24px}
+  .idx .k,.idx .d{display:none}
+  .cgrid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  body{font-size:16.5px}
+  .row{grid-template-columns:1fr;gap:2px}
+  .tl li{grid-template-columns:1fr;gap:2px}
+  .cgrid{grid-template-columns:1fr}
+  .gl{grid-template-columns:1fr}
+  .site .brand{display:none}
+  .site .wrap{justify-content:flex-end}
+  .pn{grid-template-columns:1fr}
+  .pn a:last-child{text-align:left;border-top:1px solid var(--rule)}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.idx a{transition:none}}
+@media print{.site,.cta,.pn{display:none}.sec,.row{break-inside:avoid}body{font-size:12pt}}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" id="brand" href="#home">Ran Ruiqian</a>
+    <nav id="nav" aria-label="main"></nav>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<noscript><div class="wrap"><p>请开启 JavaScript 查看本页。 Please enable JavaScript to view this page.</p></div></noscript>
+
+<script>
+(function(){
+'use strict';
+
+/* ---------- helpers ---------- */
+var EN=false;
+function b(zh,en){return {zh:zh,en:en}}
+function T(o){return typeof o==='string'?o:(EN?o.en:o.zh)}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function rich(o){return esc(T(o)).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')}
+function href(route){return '#'+route+(EN?'-en':'')}
+
+/* ---------- UI strings ---------- */
+var U={
+  work:b('作品','Work'), about:b('关于','About'), contact:b('联系','Contact'),
+  lang:b('EN','中文'),
+  back:b('← 全部作品','← All work'),
+  prev:b('上一个','Previous'), next:b('下一个','Next'),
+  lbProject:b('项目','Project'), lbType:b('类型','Type'), lbPeriod:b('时间','Period'),
+  lbRole:b('角色','Role'), lbStatus:b('状态','Status'), lbTools:b('工具','Tools'), lbLink:b('链接','Link'),
+  grp:{research:b('研究项目','Research projects'), product:b('产品项目','Product project'), course:b('课程项目','Coursework'), tools:b('软件与系统','Software and systems')},
+  allWork:b('全部作品','All work'),
+  kicker:b('作品集 · 2027 届 · 求职中','Portfolio · Class of 2027 · Open to roles'),
+  leadHero:b('机器人、机器视觉与智能硬件方向。莫纳什大学马来西亚校区应用工程硕士，2027 年 1 月毕业。',
+             'Robotics, machine vision and smart hardware. Master of Applied Engineering at Monash University Malaysia, graduating January 2027.'),
+  lead2Hero:b('核心项目是一支面向临床教学的低成本数字耳镜：我是学生项目负责人和主要开发者，覆盖结构设计、3D 打印、成像测试、软件、伦理审批和论文，目前正与学校导师商议商业化。同时做一台把 MacBook 与 iPad 合成一体的“padbook”（软件已日常使用，外壳持续迭代，后续个人商业化），以及一组软件与系统：口语训练、简历生成、桌面 AI 工具、AI 共享记忆系统、个人知识库和信息自动整理。',
+              'My core project is a low-cost digital otoscope for clinical teaching. As student project lead and principal developer I cover mechanical design, 3D printing, imaging tests, software, ethics approval and the paper, and I am now discussing commercialisation with university supervisors. Alongside it I build “padbook”, a MacBook and iPad fused into one machine (the software is in daily use, the enclosure keeps iterating, and I plan to commercialise it personally), plus a set of software and systems: speaking training, resume generation, a desktop AI toolkit, a shared AI memory system, a personal knowledge base and automatic information digests.'),
+  ctaMain:b('查看耳镜项目 →','Open the otoscope project →'),
+  ctaAbout:b('教育与经历','Background'),
+  reticleCap:b('图示：工作距离 20 mm 下的测试项目，MTF50（ISO 12233 斜边）、时域 SNR、视场角、帧率。',
+               'Figure: tests run at a 20 mm working distance: MTF50 (ISO 12233 slanted edge), temporal SNR, field of view, frame rate.'),
+  workSub:b('两个研究项目（耳镜和本科毕设）、软硬件一体的 padbook、六个软件与系统项目，以及硕士课程项目汇总。','Two research projects (the otoscope and my undergraduate thesis), the hardware-plus-software padbook, six software and systems projects, and a summary of master’s coursework.'),
+  aboutH:b('关于我','About'),
+  aboutSub:b('教育、经历与技能','Education, experience and skills'),
+  edu:b('教育','Education'), exp:b('经历','Experience'), cert:b('证书','Certificate'),
+  skills:b('技能','Skills'), skHead:[b('方向','Area'),b('内容','What I use'),b('用在','Used in')],
+  beyond:b('工作之外','Outside work'),
+  contactH:b('欢迎联系','Get in touch'),
+  cEmail:b('邮箱','Email'), cGit:b('GitHub','GitHub'), cKaggle:b('Kaggle','Kaggle'), cLoc:b('所在地','Based in'), cWant:b('意向','Looking for'),
+  cLocV:b('马来西亚 Subang Jaya','Subang Jaya, Malaysia'),
+  cWantV:b('2027 届正式岗与实习，上海、杭州优先，吉隆坡亦可','Full-time and internship roles, class of 2027. Shanghai and Hangzhou preferred; Kuala Lumpur also possible'),
+  foot:b('本页项目均为本人完成或参与，数字来自实测和课程材料。开发中使用 AI 编程工具提高效率，需求定义、方案取舍、实物测试和验收由我负责。',
+         'Everything on this page is my own work or my part of a team. Figures come from my measurements and course materials. I use AI coding tools to move faster; requirements, trade-offs, physical testing and acceptance are mine.'),
+  more:b('查看','View'),
+  glanceH:b('技能速览','Skills at a glance'), glanceAll:b('全部技能 →','All skills →'),
+  skNote:b('加粗为自评较熟练的工具和方法，其余是在课程或项目中实际用过的。','Bold marks tools and methods I rate myself more fluent in; the rest I have used in coursework or projects.')
+};
+
+/* ---------- diagrams ---------- */
+function reticle(){
+  var s='<svg class="reticle" viewBox="0 0 480 500" role="img" aria-label="Reticle with ruler and slanted-edge target" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1">';
+  s+='<circle cx="240" cy="230" r="190"/><circle cx="240" cy="230" r="120" stroke-opacity=".45"/><circle cx="240" cy="230" r="3" fill="currentColor"/>';
+  s+='<line x1="30" y1="230" x2="222" y2="230"/><line x1="258" y1="230" x2="450" y2="230"/>';
+  s+='<line x1="240" y1="20" x2="240" y2="212"/><line x1="240" y1="248" x2="240" y2="440"/>';
+  var i,x;
+  for(i=-9;i<=9;i++){ if(i===0) continue; x=240+i*20; s+='<line x1="'+x+'" y1="'+(i%5===0?222:226)+'" x2="'+x+'" y2="'+(i%5===0?238:234)+'" stroke-opacity=".8"/>'; }
+  s+='<g transform="translate(300 96) rotate(5)"><rect width="72" height="72" stroke-opacity=".9"/><path d="M36 0H72V72H36Z" fill="currentColor" stroke="none"/></g>';
+  s+='<text x="300" y="86" fill="currentColor" stroke="none" font-family="IBM Plex Mono,monospace" font-size="10" letter-spacing=".6">ISO 12233</text>';
+  s+='<text x="250" y="218" fill="currentColor" stroke="none" font-family="IBM Plex Mono,monospace" font-size="10" opacity=".7">FOV</text>';
+  s+='<line x1="40" y1="458" x2="440" y2="458"/>';
+  for(i=0;i<=20;i++){ x=40+i*20; s+='<line x1="'+x+'" y1="458" x2="'+x+'" y2="'+(i%5===0?446:452)+'"/>'; }
+  var lab=[0,5,10,15,20];
+  for(i=0;i<lab.length;i++){ s+='<text x="'+(40+lab[i]*20)+'" y="480" text-anchor="middle" fill="currentColor" stroke="none" font-family="IBM Plex Mono,monospace" font-size="10">'+lab[i]+(lab[i]===20?' mm':'')+'</text>'; }
+  s+='</svg>';
+  return s;
+}
+function otoDiagram(){
+  var L=EN?{
+    a:['Modular handle','3D printed, threaded','~3.2 mm camera, light'],
+    c:['USB imaging','1280×720 MJPG','~25 FPS'],
+    d:['Windows app','Python / OpenCV','preview, mark, save'],
+    e:['PC','Phone (QR code)','iPad (QR code)'],
+    cap:'LAN sharing, joined by QR code'
+  }:{
+    a:['模块化手柄','3D 打印，螺纹连接','约 3.2 mm 摄像头，照明'],
+    c:['USB 成像','1280×720 MJPG','约 25 FPS'],
+    d:['Windows 软件','Python / OpenCV','预览、标注、保存'],
+    e:['电脑','手机（扫码）','iPad（扫码）'],
+    cap:'局域网共享，扫码加入'
+  };
+  var s='<svg viewBox="0 0 840 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="System diagram" font-family="ui-monospace,Menlo,Consolas,PingFang SC,Microsoft YaHei,monospace" font-size="12.5" fill="none" stroke="currentColor" stroke-width="1">';
+  s+='<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="currentColor" stroke="none"/></marker></defs>';
+  var boxes=[[10,180,L.a],[235,170,L.c],[450,190,L.d]],k,bx;
+  for(k=0;k<boxes.length;k++){
+    bx=boxes[k];
+    s+='<rect x="'+bx[0]+'" y="50" width="'+bx[1]+'" height="96"/>';
+    s+='<text x="'+(bx[0]+bx[1]/2)+'" y="84" text-anchor="middle" fill="currentColor" stroke="none" font-weight="500">'+esc(bx[2][0])+'</text>';
+    s+='<text x="'+(bx[0]+bx[1]/2)+'" y="106" text-anchor="middle" fill="currentColor" stroke="none" opacity=".75">'+esc(bx[2][1])+'</text>';
+    s+='<text x="'+(bx[0]+bx[1]/2)+'" y="126" text-anchor="middle" fill="currentColor" stroke="none" opacity=".75">'+esc(bx[2][2])+'</text>';
+  }
+  s+='<line x1="190" y1="98" x2="233" y2="98" marker-end="url(#ah)"/><line x1="405" y1="98" x2="448" y2="98" marker-end="url(#ah)"/>';
+  var ys=[16,78,140];
+  for(k=0;k<3;k++){
+    s+='<rect x="700" y="'+ys[k]+'" width="130" height="42"/>';
+    s+='<text x="765" y="'+(ys[k]+26)+'" text-anchor="middle" fill="currentColor" stroke="none">'+esc(L.e[k])+'</text>';
+    s+='<line x1="640" y1="98" x2="698" y2="'+(ys[k]+21)+'" marker-end="url(#ah)"/>';
+  }
+  s+='<text x="670" y="204" text-anchor="middle" fill="currentColor" stroke="none" opacity=".7" font-size="11">'+esc(L.cap)+'</text>';
+  s+='</svg>';
+  return s;
+}
+var DIAG={oto:otoDiagram};
+
+/* ---------- projects ---------- */
+var P=[
+{id:'otoscope',no:'01',grp:'research',
+ title:b('低成本模块化数字耳镜','Low-Cost Modular Digital Otoscope'),
+ sub:b('面向临床教学','For clinical teaching'),
+ kind:b('硕士研究项目','Master’s research'), period:'2026.03 –',
+ role:b('学生项目负责人、主要开发者','Student project lead, principal developer'),
+ status:b('论文已录用；软件 V3.2.1 已交付；正与学校导师商议商业化','Paper accepted; software V3.2.1 delivered; commercialisation under discussion with university supervisors'),
+ tools:'SolidWorks · Bambu Lab H2D · Python · OpenCV · Git',
+
+ supervisor:b('导师：Assoc. Prof. Ir. Dr. Chiew Yeong Shiong','Supervisor: Assoc. Prof. Ir. Dr. Chiew Yeong Shiong'),
+ lead:b('传统耳镜只有持镜的人看得到耳道，老师没法实时确认学生有没有对准。我做了一支零件和材料约 22 美元的模块化数字耳镜：3.2 mm 微型摄像头加 3D 打印笔式手柄，电脑、手机和 iPad 扫码就能同时看同一路实时画面。从摄像头选型、结构设计、成像测试到软件交付、伦理审批和论文，由我牵头完成，论文已被 IECBES 2026 录用。',
+        'In a conventional otoscope only the holder sees the ear canal, so a teacher cannot check in real time whether a student is aimed correctly. I built a modular digital otoscope whose parts and materials cost about USD 22: a 3.2 mm micro camera in a 3D-printed pen-style handle, with a live image that a PC, phone and iPad can all watch by scanning a QR code. I led it from camera selection, structural design and imaging tests through software delivery, ethics approval and the paper, which is accepted at IECBES 2026.'),
+ secs:[
+  {t:'text',h:b('背景','Background'),p:[
+    b('需求来自莫纳什在柔佛的临床教学合作方，经导师转给我：教学用耳镜要便宜，部件可以拆装更换，教师和学生要能同时看到同一路实时画面。',
+      'The need came from Monash’s clinical-teaching partner in Johor and was passed to me by my supervisors: a teaching otoscope that is cheap, has replaceable parts, and lets teacher and students watch the same live image together.'),
+    b('项目 2026 年 3 月下旬启动，范围包括微型摄像头选型、照明、结构 CAD、3D 打印、USB 成像、Windows 软件、图像采集、局域网共享、蓝牙遥控和性能验证。定位是教学演示原型，不是医疗器械，不用于临床诊断。',
+      'The project started in late March 2026. Scope: micro-camera selection, illumination, structural CAD, 3D printing, USB imaging, a Windows app, image capture, LAN sharing, a Bluetooth remote and performance validation. It is a teaching demonstrator, not a medical device, and is not for clinical diagnosis.')]},
+  {t:'fig',h:b('整机结构','Assembly'),items:[
+    {src:'oto-exploded.jpg',cap:b('爆炸示意图：(a) 4.25 mm 一次性耳镜套；(b) 前盘（三爪卡口）；(c) 3.2 mm 摄像头；(d)(e) 带定位柱和定位孔的两片手柄；(f) 后锁紧环；(g) USB 接软件系统。','Exploded view: (a) 4.25 mm disposable speculum cover; (b) front disk with three-claw bayonet; (c) 3.2 mm camera; (d)(e) the two handle halves with locating posts and holes; (f) rear locking ring; (g) USB to the software.')}]},
+  {t:'list',h:b('我做了什么','What I did'),items:[
+    b('**结构与打印：**设计 Ø20 × 95 mm 的笔式手柄，由前盘、左右两片手柄和后锁紧环四个打印件组成，螺纹（M14、M16）加定位柱连接，前端三爪卡口固定耳镜套。用 Bambu Lab H2D 打印，正式件 PETG、0.12 mm 层高、6 层墙、45% Gyroid 填充。样机经过初代 3.9 mm 版、3.2 mm 的 v1/v2 到 V3 final，每一代针对上一代暴露的问题重新设计。',
+      '**Structure and printing:** designed a Ø20 × 95 mm pen-style handle of four printed parts (front disk, two handle halves, rear ring), joined by M14 and M16 threads and locating posts, with a three-claw bayonet for the speculum cover. Printed on a Bambu Lab H2D, final parts in PETG at 0.12 mm layers, 6 walls and 45% gyroid infill. The design went from a first 3.9 mm prototype through 3.2 mm v1/v2 to the V3 final, each generation redesigned around what the last one exposed.'),
+    b('**可选握把：**设计 L 形可拆握把，用 Python 驱动 SolidWorks 的 COM 接口参数化建模，每个脚本自带校验；从 R1 迭代到 R3.1，R3.1 已打印并装配成功。',
+      '**Optional grip:** designed a detachable L-shaped grip, modelled parametrically by driving the SolidWorks COM API from Python with a self-check in every script; iterated from R1 to R3.1, and R3.1 has been printed and assembled successfully.'),
+    b('**成像：**选型 Ø3.2 mm、有效长度约 71 mm 的 USB 微型摄像头，自带照明；在驱动层查明帧率瓶颈，把输出从约 10 fps 提到约 25 fps。',
+      '**Imaging:** chose a Ø3.2 mm, roughly 71 mm long USB micro camera with built-in illumination, and traced the frame-rate bottleneck to the driver layer, lifting output from about 10 fps to about 25 fps.'),
+    b('**软件：**用 Python 和 OpenCV 写 Windows 程序：实时预览、十字准线和可拖动教学框、9 个画面参数调节并写入后回读验证、预览冻结（录像不中断）、拍照和录像按日期归档、按设备身份注册多台摄像头。拆分为十余个模块，自动化测试覆盖相机逻辑、局域网服务、蓝牙解析、打包和回归。',
+      '**Software:** a Windows app in Python and OpenCV: live preview, crosshair and draggable teaching box, nine image parameters with write-then-read-back verification, preview freeze that never interrupts recording, photos and video filed by date, and multiple cameras registered by device identity. It is split into more than ten modules, with automated tests over camera logic, LAN service, Bluetooth parsing, packaging and regression.'),
+    b('**局域网共享：**本机 HTTP/MJPEG 服务，按 Q 弹出二维码，电脑、手机和 iPad 扫码即看，页面只读；只有浏览器连接时才编码，防火墙规则只放行本程序的入站 8080 端口且限本地子网。',
+      '**LAN sharing:** a local HTTP/MJPEG service; press Q for a QR code and a PC, phone or iPad joins by scanning, read-only; encoding runs only while a browser is connected, and the firewall rule admits only this program’s inbound port 8080 on the local subnet.'),
+    b('**无线遥控：**设计 XIAO nRF52840 双键蓝牙控制器和 PCA10059 接收端（BLE 到 USB CDC），固件加协议共 15 项主机测试，已在实机验证短按、长按、冻结和解冻、插拔重连。',
+      '**Wireless remote:** designed a two-key XIAO nRF52840 Bluetooth controller and a PCA10059 receiver (BLE to USB CDC), 15 host tests across firmware and protocol, verified on hardware for short press, long press, freeze and unfreeze, and unplug-replug reconnection.'),
+    b('**测试：**在 20 mm 工作距离下做 MTF50（斜边法）、时域信噪比、视场、帧率和温升测试，并从原始数据重算，结果与论文一致。',
+      '**Testing:** MTF50 (slanted edge), temporal SNR, field of view, frame rate and temperature rise at a 20 mm working distance, with a recomputation from the raw data confirming the paper’s numbers.'),
+    b('**伦理与验证：**先用基于 IHA 数据库的人工耳道验证（远端 6 mm 字母“B”在暗腔里靠自带照明可辨认），再准备 6 份伦理材料，通过莫纳什人体研究伦理审批，采集 3 位健康志愿者的双耳图像。',
+      '**Ethics and validation:** validated first on an artificial ear canal built from the IHA database (a 6 mm letter “B” at the far end is legible in the dark cavity under the built-in light), then prepared six ethics documents, obtained Monash human research ethics approval and imaged both ears of three healthy volunteers.'),
+    b('**论文：**第一作者，撰写会议论文 “Design and Development of a Low-Cost Modular Digital Otoscope for Clinical Teaching”，已被 IECBES 2026 录用，计划 2026 年 12 月在吉隆坡做口头报告。',
+      '**Paper:** first author of “Design and Development of a Low-Cost Modular Digital Otoscope for Clinical Teaching”, accepted at IECBES 2026, with an oral presentation planned for December 2026 in Kuala Lumpur.')]},
+  {t:'table',h:b('关键指标','Key figures'),head:[b('指标','Metric'),b('结果','Result'),b('条件 / 说明','Condition / note')],rows:[
+    [b('零件与材料成本','Parts and materials cost'),'≈ USD 22',b('21.91 美元','USD 21.91')],
+    ['MTF50','0.2257 ± 0.0031 cy/px',b('20 mm 峰值；ISO 12233 斜边法，5–50 mm 共 30 张','peak at 20 mm; ISO 12233 slanted edge, 30 images over 5–50 mm')],
+    [b('时域信噪比','Temporal SNR'),'20.26 dB',b('20 mm，均匀中灰靶，59 张；重算 20.249 dB','20 mm, uniform grey target, 59 frames; recomputed 20.249 dB')],
+    [b('视场（20 mm 处）','Field of view at 20 mm'),'30.21 × 15.60 mm',b('1 mm 标定网格；中心约 49.8 px/mm','1 mm calibration grid; about 49.8 px/mm at centre')],
+    [b('帧率','Frame rate'),'25.13 / 24.97 fps',b('采集 / 显示，1280×720 MJPG','capture / display, 1280×720 MJPG')],
+    [b('连续工作温升','Temperature rise'),'+ 1.9 °C',b('15 分钟，25.3 → 27.2 °C，热像仪测量','15 minutes, 25.3 → 27.2 °C, thermal camera')],
+    [b('自动化测试','Automated tests'),'180 / 180',b('软件 V3.2.1，全部通过','software V3.2.1, all passing')],
+    [b('伦理审批','Ethics approval'),'MUHREC 53706',b('2026.09.02 批准，有效至 2031.09.02','approved 2026-09-02, valid to 2031-09-02')]]},
+  {t:'fig',h:b('测试结果','Test results'),cols:2,items:[
+    {src:'oto-mtf.jpg',cap:b('MTF50 随距离变化：20 mm 处峰值 0.2257 cy/px。','MTF50 versus distance: peak of 0.2257 cy/px at 20 mm.')},
+    {src:'oto-fov.jpg',cap:b('20 mm 处三次拍摄的 1 mm 标定网格，用于测视场和图像比例。','Three captures of the 1 mm calibration grid at 20 mm, used for field of view and image scale.')}]},
+  {t:'fig',h:b('软件界面','Software'),cols:2,items:[
+    {src:'oto-live.jpg',cap:b('实时预览：分辨率、帧率、时间叠加显示，底部为快捷键栏，带十字准线。','Live view: resolution, frame rate and time overlay, a shortcut bar along the bottom, and a crosshair.')},
+    {src:'oto-controls.jpg',cap:b('图像控制面板：亮度、对比度、饱和度、色相、锐度、Gamma、增益、曝光和白平衡，修改即时生效。','Image controls: brightness, contrast, saturation, hue, sharpness, gamma, gain, exposure and white balance, applied live.')}]},
+  {t:'table',h:b('机械参数','Mechanical parameters'),head:[b('项目','Item'),b('数值','Value')],rows:[
+    [b('笔式手柄','Pen-style handle'),'Ø 20 × 95 mm'],
+    [b('前盘最大外径 / 耳镜套','Front disk max diameter / speculum'),'Ø 30 mm · 4.25 mm'],
+    [b('卡口','Bayonet'),b('三爪，间隔 120°，锁止间隙 1.4 mm','three claws at 120°, 1.4 mm locking clearance')],
+    [b('前端 / 后端螺纹','Front / rear thread'),'M14 × 2.0 · M16 × 2.0'],
+    [b('定位柱 / 定位孔','Locating post / hole'),'Ø 4.0 mm · Ø 4.3 mm'],
+    [b('PCB 腔','PCB cavity'),'6.4 × 4.2 × 45 mm'],
+    [b('正式件用料（外壳）','Housing material used'),'PETG 30.32 g']]},
+  {t:'fig',h:b('可选 L 形握把','Optional L-shaped grip'),items:[
+    {sm:1,src:'oto-lgrip.jpg',cap:b('R3.1 装配的 CAD 视图：铰链上盖加滑动锁紧套。铰链 0 到 −75° 全程无碰撞，锁紧套行程 0–34.5 mm 只有设计的预紧接触。','CAD view of the R3.1 assembly: a hinged cap and sliding lock sleeve. The hinge sweeps 0 to −75° with no collision, and the sleeve travel of 0–34.5 mm touches only at the designed preload.')}]},
+  {t:'timeline',h:b('时间线','Timeline'),items:[
+    ['2026.03',b('项目启动，确认需求与范围。','Project starts; requirements and scope agreed.')],
+    ['2026.04 – 05',b('初代 3.9 mm 样机，验证概念并暴露结构问题，推动重新设计。','First 3.9 mm prototype validates the concept and exposes structural issues that drive the redesign.')],
+    ['2026.07',b('按 3.2 mm 摄像头重新设计，经 v1.0、v2.1、v2.2 螺纹和前盘试验，7 月下旬定型 V3 final。','Redesign around the 3.2 mm camera; v1.0, v2.1 and v2.2 thread and front-disk trials, with V3 final settled in late July.')],
+    ['2026.08.01',b('软件 V3.0.0 基线完成，48 项测试通过。','Software V3.0.0 baseline done, 48 tests passing.')],
+    ['2026.09.02',b('人体研究伦理审批通过（MUHREC 53706，有效期至 2031.09.02），之后采集志愿者图像。','Human research ethics approved (MUHREC 53706, valid to 2031-09-02); volunteer imaging follows.')],
+    ['2026.10.01 – 19',b('L 形握把从 R1 迭代到 R3.1。','L-shaped grip iterated from R1 to R3.1.')],
+    ['2026.10.08',b('V3.2.0：蓝牙双键遥控和预览冻结，98 项测试通过，并完成实机验收。','V3.2.0: Bluetooth two-key remote and preview freeze, 98 tests passing, with on-device acceptance.')],
+    ['2026.10.30',b('V3.2.1（RC6）：简化局域网连接流程，180 项测试通过，定为交付版本。','V3.2.1 (RC6): simplified LAN connection flow, 180 tests passing, chosen as the delivery version.')],
+    ['2026.11 –',b('正与学校和导师商议该项目的商业化。','Commercialisation of the project under discussion with the university and supervisors.')],
+    ['2026.12',b('IECBES 2026，吉隆坡口头报告（计划）。','IECBES 2026 oral presentation, Kuala Lumpur (planned).')]]},
+  {t:'text',h:b('商业化','Commercialisation'),p:[
+    b('目前正在与学校和导师商议把这个项目推向商业化。项目从一开始就按产品思路推进：约 22 美元的零件成本、部件模块化可更换、多设备共享、人体研究伦理合规验证，这些都是从样机走向可交付产品需要的基础。具体方案仍在讨论中。','I am currently discussing with the university and my supervisors how to take this project towards commercialisation. It was run as a product from the start: a parts cost of about USD 22, modular replaceable parts, multi-device sharing and ethics-compliant human-subject validation, which are the foundations a prototype needs to become a deliverable product. The plan itself is still under discussion.')]},
+  {t:'list',h:b('迭代与关键决策','Iteration and key decisions'),items:[
+    b('初代 3.9 mm 样机跑通概念后，针对“摄像头难拆、前壁易碎、没有耳镜套卡扣”三个问题整代重新设计，改为 3.2 mm 分体结构和三爪卡口。','After the first 3.9 mm prototype proved the concept, I redesigned the whole generation around three problems (camera hard to remove, thin front wall, no speculum catch), moving to a 3.2 mm split design with a three-claw bayonet.'),
+    b('查明摄像头驱动在 FOURCC 设置顺序不对时会静默退回低帧率格式，调整后输出从约 10 fps 提到约 25 fps；并据实测把自动曝光上限锁在 −5，保证不掉帧。','Found that the camera driver silently falls back to a low-frame-rate format when FOURCC is set in the wrong order; fixing it lifted output from about 10 to about 25 fps, and measurements led me to cap auto exposure at −5 to keep the frame rate.'),
+    b('局域网共享经 V3.2.1 的多个候选版本对比，选定连接几乎即时、流程最简的 RC6 作为交付版本，并把已核对的版本打包为只含运行文件的教师版。','LAN sharing was compared across several V3.2.1 candidates, and RC6, which connects almost instantly with the simplest flow, was chosen for delivery and packaged as a runtime-only teacher edition.'),
+    b('软件版本全部保留，不覆盖历史；用 59 张图和原始数据归档做可复算的测试，重算结果与论文一致（信噪比仅差 0.011 dB）。','Every software release is kept and history is never overwritten; tests use 59 frames with an archived raw dataset so they can be recomputed, and a recomputation matches the paper (SNR differs by only 0.011 dB).'),
+    b('整理了完整的项目历史文档，记录技术选择、文件位置和开发历史，项目可以随时交接和继续。','Compiled a complete project history recording technical choices, file locations and development history, so the project can be handed over and continued at any time.')]},
+  {t:'list',h:b('后续扩展方向','Extension directions'),note:true,items:[
+    b('无线遥控实体控制器：固件、接收端和软件均已完成并实机验证，下一步是做成手持实体（按键、电池和外壳），计划配合加粗加长的 L 形握把。','Physical remote: firmware, receiver and software are done and verified on hardware; next is the handheld unit (keys, battery, housing), planned together with a thicker, longer L-shaped grip.'),
+    b('IMU 姿态检测、DRV2605L 与 LRA 触觉反馈：设计与探索阶段。','IMU orientation sensing, and DRV2605L with LRA haptic feedback: design and exploration.'),
+    b('软件中已有本地画质分析（亮度、对比度、清晰度、过曝、欠曝），耳道和鼓膜结构的 AI 辅助识别列在路线图中，只作教学辅助。','The software already includes local image-quality analysis (brightness, contrast, sharpness, over- and under-exposure); AI-assisted recognition of ear-canal and eardrum structures is on the roadmap as a teaching aid only.')]},
+  {t:'tags',tags:['SolidWorks API','3D printing (PETG)','Python','OpenCV','MJPEG streaming','Bluetooth LE','MTF50 / SNR','Ethics approval','IEEE conference paper']}
+ ]},
+
+{id:'thesis',no:'02',grp:'research',
+ title:b('液压溢流阀的动态建模与参数敏感性分析','Dynamic Modelling and Parameter Sensitivity Analysis of a Hydraulic Relief Valve'),
+ sub:b('本科毕业设计 · AMESim','Undergraduate thesis · AMESim'),
+ kind:b('本科毕业设计','Undergraduate thesis'), period:b('本科阶段','Undergraduate years'),
+ role:b('建模、仿真与参数分析','Modelling, simulation and parameter analysis'),
+ status:b('已完成','Completed'),
+ tools:'AMESim',
+ lead:b('在 AMESim 中建立液压溢流阀的动态模型，研究阀芯质量、阻尼孔和弹簧刚度等参数对动态响应的影响。',
+        'Built a dynamic model of a hydraulic relief valve in AMESim and studied how spool mass, damping orifice and spring stiffness affect its dynamic response.'),
+ secs:[
+  {t:'list',h:b('做了什么','What I did'),items:[
+    b('**建模：**在 AMESim 中搭建液压溢流阀的动态模型。','**Modelling:** built a dynamic model of a hydraulic relief valve in AMESim.'),
+    b('**仿真：**对液压系统做动态仿真分析。','**Simulation:** ran dynamic simulations of the hydraulic system.'),
+    b('**参数敏感性分析：**分别考察阀芯质量、阻尼孔、弹簧刚度等参数对结果的影响。','**Parameter sensitivity analysis:** examined how spool mass, damping orifice, spring stiffness and similar parameters change the results.')]},
+  {t:'text',h:b('说明','Note'),p:[
+    b('数值结果和结论见毕业论文。','Numerical results and conclusions are in the thesis.')]},
+  {t:'tags',tags:['AMESim','Hydraulic systems','Dynamic simulation','Sensitivity analysis']}
+ ]},
+
+{id:'padbook',no:'03',grp:'product',
+ title:b('padbook：把 MacBook 与 iPad 合成一台笔记本','padbook: Fusing a MacBook and an iPad into One Notebook'),
+ sub:b('无屏 Mac + iPad 随航 · 定制 3D 打印外壳','Screenless Mac + iPad Sidecar · custom 3D-printed enclosure'),
+ kind:b('软硬件一体产品','Hardware and software product'), period:'2026.10 –',
+ role:b('产品定义、软件与结构方案决策、实物测量、打印与试装、验收','Product definition, software and structural decisions, physical measurement, printing, fitting and acceptance'),
+ status:b('软件已完成并日常使用；外壳持续迭代；后续个人商业化','Software complete and in daily use; enclosure iterating; personal commercialisation planned'),
+ tools:'Swift · Objective-C · Bash · launchd · CadQuery · Bambu Studio · PLA / PETG / TPU',
+ lead:b('把一台拆掉屏幕的 2019 款 MacBook Pro 和一台 iPad Air 13 英寸（M3）做成一台真正的笔记本：开机、插线，iPad 就自动成为 Mac 的屏幕，不需要任何确认；下壳装主机，上壳是 iPad 的日常保护壳，可快拆，合起来是一个完整的扁平长方体。',
+        'A 2019 MacBook Pro with its display removed and a 13-inch iPad Air (M3) become one working notebook: boot, plug in, and the iPad becomes the Mac’s screen with no confirmation. The lower shell holds the Mac, the upper shell is the iPad’s everyday case and detaches quickly, and closed it forms one flat cuboid.'),
+ secs:[
+  {t:'list',h:b('我做了什么','What I did'),items:[
+    b('**定义产品：**无屏 Mac 加 iPad 当屏幕；Mac 端零确认；只用有线；iPad 连着时永远是主屏；另有键鼠共享模式。外壳的风格、尺寸原则、快拆、Pencil 笔仓和内衬也由我定。','**Product definition:** a screenless Mac with an iPad as its display; zero confirmation on the Mac; wired only; the iPad is always the primary screen; plus a keyboard-and-mouse sharing mode. I also set the enclosure’s style, size rules, quick release, Pencil bay and lining.'),
+    b('**做关键决策：**两种模式拆成两个快捷指令；保留屏幕共享作备用；放弃原机铰链、改用现成摩擦铰链；上壳选择顶边滑入加可拆顶条的方案；音量键软条用榫卯式固定。','**Key decisions:** two modes as two separate Shortcuts; screen sharing kept as a fallback; the original hinge dropped in favour of off-the-shelf friction hinges; the upper shell uses a top-edge slide-in with a removable top bar; the volume strip locks in with a joint instead of glue.'),
+    b('**实物测量：**用游标卡尺量 Mac 边缘厚度（前 9.7 mm、后 10.4 mm）、脚垫、接口孔高、原机铰链和 Pencil 笔尖位置，作为建模的实测依据。','**Physical measurement:** calipers on the Mac’s edge thickness (9.7 mm front, 10.4 mm rear), feet, port heights, the original hinge and the Pencil tip position, as the ground truth for modelling.'),
+    b('**打印与试装：**在学校 Bambu Lab H2D 和自己的 A1 mini 上打印，逐版做实物试装和手感测试；软件部分在真机上做拔插、冷启动和热插拔测试。','**Printing and fitting:** printed on the university’s Bambu Lab H2D and my own A1 mini, fitting and hand-testing every revision; the software was tested on the real machine with plug, cold-boot and hot-plug cases.')]},
+  {t:'list',h:b('软件 ipad-screen','Software: ipad-screen'),items:[
+    b('**插线自动连接：**后台每 5 秒检测 USB 上的 iPad，发现后由 Mac 主动发起有线随航，实测连接约 3 秒，真实拔插后约 6 秒自动恢复。','**Plug-in auto-connect:** a background service checks USB for the iPad every 5 s and starts a wired Sidecar session itself; about 3 s to connect, about 6 s to recover after a real unplug and replug.'),
+    b('**无显示器冷启动：**Mac 开机自动登录后，插上 iPad 即自动连接并成为主屏，两次冷启动测试均成功。','**Headless cold boot:** after auto-login, plugging in the iPad connects it as the main display; both cold-boot tests passed.'),
+    b('**虚拟屏垫底：**没有真显示器时创建一块虚拟屏，让随航不再是唯一显示器；有真显示器时自动撤掉，五种热插拔场景全部符合预期。','**Virtual display fallback:** with no real monitor a virtual display is created so Sidecar is no longer the only display, and removed when a real monitor appears; all five hot-plug scenarios behave as designed.'),
+    b('**iPad 快捷指令：**一键随航、断开、状态查询、键鼠模式、诊断、重启和关机，经 SSH 触发，由图形会话里的后台服务真正执行。','**iPad Shortcuts:** one-tap connect, disconnect, status, keyboard-mouse mode, diagnostics, restart and shutdown, triggered over SSH and executed by a background agent inside the graphical session.'),
+    b('**只用有线、防睡眠、自检：**有线失败不退回无线；连接期间自动防睡眠；自检脚本覆盖 12 项系统条件，实测全部通过。','**Wired-only, keep-awake, self-check:** a failed wired link never falls back to wireless; the Mac stays awake while connected; a self-check script covers 12 system conditions and all passed.'),
+    b('**细节打磨：**隐藏随航边栏和触控栏，让 iPad 上的桌面像一块原生屏幕。','**Polish:** the Sidecar sidebar and Touch Bar are hidden so the iPad desktop looks like a native display.')]},
+  {t:'list',h:b('外壳','Enclosure'),items:[
+    b('**参数化建模：**用 Python 和 CadQuery 按 Apple 官方尺寸图（iPad Air 13 英寸 M3，280.66 × 214.90 × 6.12 mm）加实测数据生成，改参数即可重新输出 STEP 和 STL，并自动做干涉检查。','**Parametric modelling:** generated in Python and CadQuery from Apple’s official drawing (iPad Air 13-inch M3, 280.66 × 214.90 × 6.12 mm) plus my measurements; changing a parameter regenerates STEP and STL, with automated interference checks.'),
+    b('**整体尺寸：**上壳连铰链槽 313 × 252.3 × 10.8 mm，下壳 313 × 252.3 × 16.0 mm，合盖成一个完整长方体。','**Overall size:** upper shell with hinge slots 313 × 252.3 × 10.8 mm, lower shell 313 × 252.3 × 16.0 mm, closing into one cuboid.'),
+    b('**结构承重、磁铁只定位：**快拆靠几何结构承力；10 × 5 × 2 mm 磁铁的位置避开 iPad 的霍尔传感器和指南针。','**Structure carries load, magnets only locate:** quick release relies on geometry; 10 × 5 × 2 mm magnets sit clear of the iPad’s Hall sensor and compass.'),
+    b('**上壳：**iPad 从顶边滑入；可拆顶条上带 TPU 音量键软条（榫头弯折插入）、Apple Pencil 笔仓和顶边挡边；指纹键处为贯穿豁口，方便直接按压。','**Upper shell:** the iPad slides in from the top edge; a removable top bar carries the TPU volume strip (a tenon bent into place), the Apple Pencil bay and the edge lip; the Touch ID key sits in a through-cut so it can be pressed directly.'),
+    b('**下壳：**Mac 像抽屉一样从前面推入，四角垫块托住，前挡条固定，底面蜂窝散热，两侧留接口长槽。','**Lower shell:** the Mac slides in from the front like a drawer, held by corner pads and a front bar, with a honeycomb base for ventilation and long port slots on both sides.'),
+    b('**多材料：**主体用 PLA 或 PETG，音量键软条用 TPU，铰链座按扭矩要求设计加强筋和硬限位。','**Multi-material:** PLA or PETG for the body, TPU for the volume strip, and hinge seats with ribs and hard stops sized to the required torque.')]},
+  {t:'table',h:b('关键指标','Key figures'),head:[b('项目','Item'),b('结果','Result'),b('说明','Note')],rows:[
+    [b('有线连接时间','Wired connect time'),'≈ 3 s',b('实测','measured')],
+    [b('拔插后自动恢复','Auto-recovery after replug'),'≈ 6 s',b('首次尝试即为有线','wired on the first attempt')],
+    [b('热插拔场景','Hot-plug scenarios'),'5 / 5',b('接显示器加 iPad、拔 iPad、插回 iPad、拔显示器、插回显示器','monitor plus iPad, unplug iPad, replug iPad, unplug monitor, replug monitor')],
+    [b('冷启动','Cold boot'),'2 / 2',b('无显示器自动连接并成为主屏','auto-connects as main display with no monitor')],
+    [b('系统自检','System self-check'),'12 / 12',b('doctor 脚本','doctor script')],
+    [b('代码规模','Code size'),'17 files · 702 lines',b('工具与脚本，另有 step1–step20 真机测试脚本','tools and scripts, plus step1–step20 on-device test scripts')],
+    [b('外壳干涉检查（v5 上壳）','Enclosure interference (upper v5)'),'0 mm³',b('iPad 就位、顶边滑入全程、顶条按入全程','iPad seated, full top-edge slide-in, full top-bar insertion')],
+    [b('铰链槽配合间隙','Hinge-slot clearance'),'0.15 mm',b('实物试装，松紧合适','fitted on the real part; snug and stable')]]},
+  {t:'timeline',h:b('时间线','Timeline'),items:[
+    ['2026.10.22',b('提出需求，完成第一版工具包和 iPad 一键随航快捷指令方案。','Requirements set; first toolkit and the one-tap Sidecar Shortcut plan done.')],
+    ['2026.11.11',b('在真机上编译运行并完成软件，同日决定做定制 3D 打印外壳。','Compiled and ran on the real machine, software completed; the same day I decided to build a custom 3D-printed enclosure.')],
+    ['2026.11.12',b('隐藏随航边栏和触控栏；上壳 v1 建模并切片出测试件。','Sidecar sidebar and Touch Bar hidden; upper shell v1 modelled and a test piece sliced.')],
+    ['2026.11.13',b('上壳 v2、铰链槽和锁块完成，PLA 实物打印。','Upper shell v2, hinge slots and lock block done and printed in PLA.')],
+    ['2026.11.14',b('下壳 v1、TPU 音量键软条 v4 完成；整理 v5 总方案。','Lower shell v1 and TPU volume strip v4 done; v5 master plan written.')],
+    ['2026.11.15',b('上壳 v5 建模并通过数字干涉检查，试件和软条切片完成，进入打印验证。','Upper shell v5 modelled and cleared by digital interference checks; test pieces and strips sliced and ready for print validation.')],
+    ['2026.11 –',b('继续迭代外壳；零件采购后整壳打印；规划个人商业化。','Enclosure keeps iterating; full-shell print once parts arrive; personal commercialisation planned.')]]},
+  {t:'text',h:b('持续优化与商业化','Ongoing refinement and commercialisation'),p:[
+    b('软件部分已经是完整可用的形态，日常使用中，目前的优化集中在体验细节。外壳在数天内完成了上壳 v1 到 v5 的迭代和下壳首版，每一版都以实物试装和数字干涉检查为依据。后续计划完成整壳的铰链、磁铁和内衬方案，并把 padbook 作为我个人的产品项目推进商业化。','The software is already a complete, usable form and in daily use; current work is on experience details. The enclosure went from upper-shell v1 to v5 plus a first lower shell within days, each revision grounded in physical fitting and digital interference checks. Next I will finish the hinge, magnet and lining scheme for the full shell, and take padbook forward as my own commercial product.')]},
+  {t:'tags',tags:['macOS','Sidecar','Swift','Objective-C','launchd','CadQuery','3D printing','TPU','Parametric design','Product design']}
+ ]},
+
+{id:'speakbuddy',no:'04',grp:'tools',
+ title:b('SpeakBuddy 语音口语训练系统','SpeakBuddy: A Voice-Based Speaking Trainer'),
+ sub:b('免按键连续对话 · 长期记忆','Hands-free conversation · long-term memory'),
+ kind:b('软件项目','Software project'), period:'2026',
+ role:b('产品定义、交互设计、真机验收','Product definition, interaction design and on-device acceptance'),
+ status:b('连续对话主流程已完成并投入使用','Core conversation loop complete and in use'),
+ tools:'Web / mobile · speech recognition and synthesis · LLM · iPhone 17 Pro',
+ lead:b('面向长期口语训练的连续语音对话系统。目标是接近真人通话的交互：免按键、可随时打断、语速自适应。',
+        'A continuous voice-conversation system for long-term speaking practice. The target is the feel of a real call: hands-free, interruptible at any moment, with adaptive speaking speed.'),
+ secs:[
+  {t:'list',h:b('核心能力','Core capabilities'),items:[
+    b('**免按键连续对话与即时打断（barge-in）：**全程不需要按键，用户随时插话，系统立即让出话轮。','**Hands-free turn-taking with barge-in:** no buttons at any point; the user can cut in at any moment and the system yields the turn immediately.'),
+    b('**语音指令控制：**用口头指令调整语速、请求重复，语速调节有上限，避免无限放慢。','**Voice-command control:** speaking speed and repeat requests are handled by voice, with a floor so speech cannot be slowed indefinitely.'),
+    b('**实时字幕与完整对话记录：**AI 回复同步生成英文字幕，对话全程留存，滚动查看历史不会打断播报。','**Live subtitles and a full transcript:** AI replies are subtitled in English as they are spoken, the whole conversation is kept, and scrolling history never interrupts playback.'),
+    b('**角色系统与长期记忆：**预设和自定义对话角色，跨会话保留用户信息，并提供口语纠错。','**Personas and long-term memory:** preset and custom conversation personas, user context kept across sessions, and spoken error correction.'),
+    b('**纯英文训练环境：**默认保留英文识别和英文字幕，不显示中文翻译，需要时可自然切换。','**English-only training environment:** English recognition and subtitles by default, no Chinese translation shown, with natural switching when needed.')]},
+  {t:'list',h:b('工程验证','Engineering validation'),items:[
+    b('在 iPhone 17 Pro 上对扬声器、顶部听筒、开麦和回声消除等音频路由做系统测试，主要音频模式运行稳定。','Systematic tests on an iPhone 17 Pro across speaker, top earpiece, open-mic and echo-cancellation routes. The main modes run stably.'),
+    b('已用于 IECBES 口头报告的备战：支持上传论文、建立独立项目空间，并提供演讲和问答两种模式。','Already used to prepare the IECBES oral presentation: it takes the paper as an upload, keeps a dedicated project space, and offers presentation and Q&A modes.')]},
+  {t:'list',h:b('路线图','Roadmap'),note:true,items:[
+    b('发音评估、口语评分、TED 跟读、按遗忘曲线复习、句型面板和每日词汇。','Pronunciation assessment, speaking scores, TED shadowing, spaced-repetition review, a sentence-pattern panel and daily vocabulary.'),
+    b('对话、分析、总结、评估分别由不同模型承担的多模型架构，规划在第二个大版本。','A multi-model architecture that assigns conversation, analysis, summarisation and assessment to different models, planned for the second major version.')]},
+  {t:'tags',tags:['Voice interaction','Barge-in','Live subtitles','Echo cancellation','Persona system','Long-term memory','LLM']}
+ ]},
+
+{id:'resume-tool',no:'05',grp:'tools',
+ title:b('岗位定制简历生成系统','Role-Tailored Resume Generation System'),
+ sub:b('岗位解析 · 匹配评分 · 定制生成','Job parsing · match scoring · tailored generation'),
+ kind:b('软件项目','Software project'), period:'2026',
+ role:b('需求与功能设计、使用验证','Requirements, feature design and validation in real use'),
+ status:b('主要流程已跑通，可导出中英文简历','End-to-end flow working; exports Chinese and English resumes'),
+ tools:'React · TypeScript · Vite · GitHub Pages · DeepSeek API',
+ links:[{l:'github.com/RanRuiqian/resume-tool',u:'https://github.com/RanRuiqian/resume-tool'}],
+ lead:b('把“针对每个岗位改简历”做成一条自动化流水线：岗位截图进，匹配分析和定制简历出。',
+        'Turns “tailor the resume to every role” into an automated pipeline: a job-ad screenshot goes in; a match analysis and a tailored resume come out.'),
+ secs:[
+  {t:'list',h:b('流水线','Pipeline'),items:[
+    b('**输入：**导入个人主资料库（教育、工作、项目、技能、学生组织、证书），并粘贴或拖入岗位截图。','**Input:** a personal master database (education, work, projects, skills, student organisations, certificates) plus pasted or dropped job-ad screenshots.'),
+    b('**解析：**LLM 识别岗位信息，计算与个人资料的匹配度并提取关键词。','**Parsing:** an LLM extracts the role details, scores the match against the profile and pulls out keywords.'),
+    b('**生成：**输出针对该岗位的中文或英文简历，各有带照片和不带照片两种版式，导出 PDF 和 Word。','**Generation:** a role-specific Chinese or English resume, each in photo and no-photo layouts, exported to PDF and Word.'),
+    b('**管理：**多 API 提供方的配置与切换；内置投递跟踪表（岗位、来源、链接、截止日期）。','**Management:** configuration and switching between several API providers, plus a built-in application tracker (role, source, link, deadline).')]},
+  {t:'list',h:b('设计取舍','Design decisions'),items:[
+    b('个人数据只保存在本地，不上传服务器；只有分析所需的内容会发给所选的模型服务。','Personal data stays on the local device; only what an analysis needs is sent to the chosen model provider.'),
+    b('规划加入二次 AI 过滤，进一步提升岗位信息识别的精度。','A second AI filtering pass is planned to sharpen how precisely role information is recognised.'),
+    b('开发流程：用交接文档管理版本和上下文，保证项目可以在不同阶段、不同工具之间无缝接力；需求定义、方案取舍和验收由我负责。','Workflow: handover documents carry versions and context so the project continues cleanly across stages and tools; I own requirements, trade-offs and acceptance.')]},
+  {t:'tags',tags:['React','TypeScript','Vite','LLM API','Prompt design','PDF / Word export','Local-first data']}
+ ]},
+
+{id:'desktop-ai',no:'06',grp:'tools',
+ title:b('个人 AI 桌面自定义工具','Personal AI Desktop Toolkit'),
+ sub:b('英文会议的实时翻译与业务应答辅助','Real-time translation and business-reply support for English meetings'),
+ kind:b('软件项目','Software project'), period:'2026.10',
+ role:b('需求定义、界面与交互设计、版本管理','Requirements, UI and interaction design, release management'),
+ status:b('核心功能已实现，进入真实会议场景验证','Core features implemented; moving into validation in real meetings'),
+ tools:'Python · Windows desktop · Zoom / Tencent Meeting',
+ lead:b('运行在 Windows 桌面的 AI 助手：低延迟接收会议语音，逐句翻译，并给出业务问答的应答建议。',
+        'A Windows desktop AI assistant that takes meeting audio with low latency, translates sentence by sentence and suggests replies to business questions.'),
+ secs:[
+  {t:'list',h:b('能力','Capabilities'),items:[
+    b('**实时语音到双语字幕：**逐句显示对方的英文原文和中文翻译。','**Live speech to bilingual captions:** the other party’s English and a Chinese translation, shown sentence by sentence.'),
+    b('**业务应答建议：**把 AI 应答建议和业务问答库合并管理，英文建议控制在约雅思 6 分的表达水平，简单、可直接开口。','**Business reply suggestions:** AI suggestions merged with a managed business Q&A bank; the English is kept near an IELTS 6 level, so it is simple enough to say aloud.'),
+    b('**悬浮界面：**半透明、可点击穿透的悬浮窗，翻译和建议并排显示，适配 Zoom 和腾讯会议，支持中英文两种模式。','**Overlay interface:** a semi-transparent, click-through floating window with translation and suggestions side by side, designed for Zoom and Tencent Meeting, in Chinese and English modes.')]},
+  {t:'list',h:b('架构与版本','Architecture and releases'),items:[
+    b('评估过把视觉识别、快速应答、翻译和摘要分别交给不同模型的多模型架构，现阶段保持现有架构，按需升级。','Evaluated a multi-model architecture that gives visual recognition, quick answers, translation and summarisation to separate models; the current architecture stays for now and can be upgraded when needed.'),
+    b('交接版本 RC1.4.3，附完整交接包和中英文续接提示词，任何人或工具都能在不看旧对话的情况下接手。','Handover release RC1.4.3 ships with a full handover package and Chinese and English continuation prompts, so anyone or any tool can take over without the old conversation.')]},
+  {t:'tags',tags:['Python','Windows desktop','Live translation','Overlay UI','Prompt design','Zoom','Tencent Meeting']}
+ ]},
+
+{id:'ai-memory',no:'07',grp:'tools',
+ title:b('AI 共享记忆系统','Shared Memory System for AI Agents'),
+ sub:b('MCP 服务器 · 原文留痕 · 自动备份 · 一句话交接','MCP server · full transcripts · automatic backup · one-phrase handover'),
+ kind:b('个人系统','Personal system'), period:'2026.11 –',
+ role:b('系统设计、需求定义、架构取舍与验收；主要由 AI 辅助实现','System design, requirements, architecture trade-offs and acceptance; implemented mainly with AI assistance'),
+ status:b('已投入运行：每日自动维护、7 个 AI 代理已接入','In operation: daily automated maintenance, 7 AI agents connected'),
+ tools:'Python · MCP · SQLite · Git / GitHub · Windows Task Scheduler · Google Drive · Obsidian',
+ lead:b('我同时使用多个 AI 代理，它们互不知道对方做过什么。我设计了一套所有 AI 共用的长期记忆：对话完整留痕，任何 AI 一句“交接”就能接上进度，每天自动备份，并且不依赖任何一家服务商。',
+        'I work with many AI agents and none of them knows what the others have done. I designed one long-term memory they all share: conversations are kept in full, any agent can pick up progress on a single handover phrase, backups run daily, and nothing depends on any one vendor.'),
+ secs:[
+  {t:'list',h:b('系统设计','System design'),items:[
+    b('**两层记忆：**提炼层（项目状态、日志、缓存，记录决定、进展和失败原因）供 AI 优先读取；原文层保存完整对话，需要追溯时再查。','**Two memory layers:** a distilled layer (project status, logs, cache, recording decisions, progress and failure reasons) that agents read first, and a raw layer holding full transcripts for when tracing is needed.'),
+    b('**统一入口（MCP 服务器）：**提供项目列表、全文搜索（含原文层）、读取、写入缓存、追加项目日志和更新项目状态六类工具；服务器自带行为规则，任何 AI 一连上就会拿到。','**One entry point (an MCP server):** six tool families (list projects, full-text search including the raw layer, read, write cache, append project log, update project status); the server carries its own rules, so any agent receives them on connection.'),
+    b('**可审计、可撤销：**每次变更写入编号日志，每条都能撤销，目前已累计 55 条；主仓库托管在 GitHub 私有仓库，原始对话只留本地。','**Auditable and reversible:** every change is entered in a numbered log and can be undone, 55 entries so far; the main repository is a private GitHub repo, while raw transcripts stay local.'),
+    b('**并入而不是另起：**发现已有一套记忆仓库和服务器后，我选择合并而非重建，Obsidian 只做“查看窗口”。','**Merge, don’t rebuild:** on finding an existing memory repository and server I merged into it rather than starting over, with Obsidian serving only as a viewing window.')]},
+  {t:'list',h:b('自动化流水线','Automation pipeline'),items:[
+    b('**对话原文导入：**只读方式读取 Codex 桌面端的 SQLite 数据库，被占用时先复制再读，每个会话输出一份 Markdown；用状态文件去重，重复运行不会重复导入。已导入 85 个会话，共 3.3 MB。','**Transcript import:** reads the Codex desktop SQLite databases read-only (copying first when locked), one Markdown file per session, de-duplicated through a state file so reruns never double-import. 85 sessions, 3.3 MB, imported so far.'),
+    b('**每日自动维护：**每天 23:40 由计划任务静默运行，错过的会在开机后补跑；四步依次是导入新对话、备份到 Google 云端硬盘、清理已合并的缓存、自动提交并推送。同步失败会写入报警文件。','**Daily maintenance:** a scheduled task runs silently at 23:40 and catches up after boot if missed; four steps in order: import new conversations, back up to Google Drive, clear merged cache, commit and push automatically. A sync failure writes an alert file.'),
+    b('**每周整理：**每周由 AI 阅读理解当周内容，合并缓存、更新项目状态、检查过期截止日期；整套流程写成可移交的提示词，换任何 AI 都能执行。','**Weekly consolidation:** an AI reads the week’s material, merges cache, updates project status and checks expired deadlines; the whole routine is written as a portable prompt that any agent can run.'),
+    b('**ChatGPT 导入：**支持官方导出的压缩包、文件夹或 conversations.json，沿对话分支还原真实内容，拖入即可导入。','**ChatGPT import:** accepts the official export as zip, folder or conversations.json, rebuilds the real thread along its active branch, and imports by drag and drop.')]},
+  {t:'list',h:b('跨代理接入','Cross-agent integration'),items:[
+    b('**覆盖 7 个代理：**Codex、Claude、ChatGPT 桌面端、Grok Bot，以及 WorkBuddy、DeepSeek Harness 和 Google Antigravity；各自的配置文件修改前都自动留有备份。','**Seven agents covered:** Codex, Claude, the ChatGPT desktop app, Grok Bot, plus WorkBuddy, DeepSeek Harness and Google Antigravity; each tool’s configuration is backed up automatically before it is changed.'),
+    b('**一句话交接：**在各代理的全局规则中写入“交接”触发语，新的 AI 读取项目状态后即可接上进度，不用我重新交代背景。','**One-phrase handover:** a “handover” trigger is written into each agent’s global rules, so a new agent reads the project state and continues without my re-explaining the background.'),
+    b('**与厂商解耦：**订阅到期或更换工具都不影响系统运行；原始对话备份在 Google 云端硬盘，备份目前只有 3.3 MB，以文本为主，增长很慢。','**Vendor independence:** a lapsed subscription or a change of tools does not affect the system; raw transcripts are backed up to Google Drive, currently just 3.3 MB of mostly text and growing slowly.')]},
+  {t:'table',h:b('关键数字','Key figures'),head:[b('项目','Item'),b('结果','Result'),b('说明','Note')],rows:[
+    [b('接入的 AI 代理','Connected agents'),'7',b('含 3 个后期接入的代理','including three connected later')],
+    [b('已导入会话','Imported sessions'),'85',b('3.3 MB，已备份','3.3 MB, backed up')],
+    [b('MCP 服务器测试','MCP server tests'),'13 / 13',b('全部通过','all passing')],
+    [b('变更日志','Change log'),'55 entries',b('编号、可逐条撤销','numbered, individually reversible')],
+    [b('自动维护','Automated maintenance'),b('每日 23:40','Daily 23:40'),b('漏跑后开机补跑','catches up after boot')]]},
+  {t:'text',h:b('关于实现方式','How it was built'),p:[
+    b('这个项目主要由 AI 辅助实现，我负责定义需求（长期运行、少维护、不依赖单一厂商）、设计整体架构和取舍、在真实环境中验收，并在过程中解决了仓库同步、编码和权限等实际问题。','The project was built mainly with AI assistance. I defined the requirements (long-running, low maintenance, no single-vendor dependence), designed the overall architecture and trade-offs, accepted the result in the real environment, and resolved practical issues along the way such as repository sync, encoding and permissions.')]},
+  {t:'tags',tags:['MCP','Agent memory','Python','SQLite','Git','Task automation','Backup','Handover protocol','Obsidian']}
+ ]},
+
+{id:'knowledge-base',no:'08',grp:'tools',
+ title:b('个人知识库与经历档案（双星记忆系统）','Personal Knowledge Base and Career Archive'),
+ sub:b('77 条结构化知识 · 15 份经历档案 · 星图与 Notion 前端','77 structured entries · 15 profile files · starmap and Notion front end'),
+ kind:b('个人系统','Personal system'), period:'2026.10 –',
+ role:b('目标定义、架构取舍、数据确认与验收','Goals, architecture trade-offs, data confirmation and acceptance'),
+ status:b('知识库、档案、星图、Notion 同步与命令行流水线已完成并运行','Knowledge base, archive, starmap, Notion sync and command-line pipeline complete and running'),
+ tools:'Python · Markdown / JSON · GitHub Actions · Notion · faster-whisper · Obsidian',
+ lead:b('把零散的收藏视频和个人经历沉淀成一套可检索、可核查、AI 随时能读的个人知识体系：从抖音收藏夹整理出 77 条结构化知识，另有 15 份个人经历档案，并用三维星图和 Notion 做前端。',
+        'Turns scattered saved videos and my own career history into one searchable, verifiable knowledge system that any AI can read: 77 structured entries distilled from a Douyin favourites folder, 15 career-profile files, and a 3D starmap plus Notion as the front end.'),
+ secs:[
+  {t:'list',h:b('内容与结构','Content and structure'),items:[
+    b('**知识库 77 条：**主数据为 JSON，Markdown、索引和关系图由脚本导出；按大类、子类、细类三层分类，覆盖 AI 工具与工作流（35）、科研（17）、个人成长（10）、论文写作（8）、商业与创业（4）和金融（3）。','**77 knowledge entries:** JSON as the source of truth, with Markdown, index and graph exported by script; a three-level taxonomy covering AI tools and workflows (35), research (17), personal growth (10), paper writing (8), business and entrepreneurship (4) and finance (3).'),
+    b('**每条都有结构：**视频内容、核心问题与手段、具体步骤、总结思路、可转成的技能和相关开源项目，另有“建议”和“看法与核查”（来源可信度、日期、时效）。按知识点去重，并保留合并日志。','**Every entry is structured:** video content, core problem and approach, concrete steps, takeaways, transferable skills and related open-source projects, plus recommendations and a verification note (source reliability, date, currency). Entries are de-duplicated by knowledge point with a merge log kept.'),
+    b('**个人经历档案 15 份：**基本信息、教育、课程、工作、活动、项目、研究、技能、时间线、目标、兴趣等，以我逐条确认过的《个人求职资料母库》为准；Notion 中个人经历库 119 条、项目库 6 个。','**15 career-profile files:** basics, education, courses, work, activities, projects, research, skills, timeline, goals and interests, anchored to a master database I confirmed line by line; the Notion side holds 119 career records and 6 projects.'),
+    b('**项目与知识互相关联：**项目与知识点之间有映射表，另有 16 个技能文件和 7 个项目目录。','**Projects and knowledge cross-linked:** a mapping ties projects to knowledge entries, alongside 16 skill files and 7 project folders.')]},
+  {t:'list',h:b('自动化流水线 vkb','Automation pipeline (vkb)'),items:[
+    b('**一条命令完成整理：**转写（本地 faster-whisper）→ 总结 → 去重 → 联网核查 → 导出星图 → 独立审查，检查通过才提交推送。','**One command does the whole run:** transcription (local faster-whisper), summarise, de-duplicate, verify online, export the starmap and independent review, committing and pushing only if the checks pass.'),
+    b('**模型按步骤可配置：**总结、联网核查等步骤可分别指定不同模型，通过 API 调用，可随时更换，不绑定单一厂商。','**Models configurable per step:** summarising, online verification and other steps can each use a different model over an API, swappable at any time with no single-vendor lock-in.'),
+    b('**规模：**约 1,705 行 Python、34 项自动化测试；处理了 94 条收藏夹基线中的 78 个视频。','**Scale:** about 1,705 lines of Python and 34 automated tests; 78 videos processed out of a 94-item favourites baseline.'),
+    b('**批量整理实绩：**2026.10.25 一次批量处理 59 条收藏，知识库从 17 条增至 60 条（新建 43、并入 9、跳过 7）；次日增至 77 条。整理节奏后来改为每周一次。','**Batch results:** on 2026-10-25 a batch of 59 favourites took the base from 17 to 60 entries (43 new, 9 merged, 7 skipped); by the next day it stood at 77. The cadence later settled on a weekly run.')]},
+  {t:'list',h:b('前端与同步','Front end and sync'),items:[
+    b('**GitHub 私有仓库为正本**，Markdown 加 JSON，约 9.5 MB；Obsidian 直接打开仓库作查看窗口。','**A private GitHub repository is the source of truth**, Markdown plus JSON at about 9.5 MB, with Obsidian opening it directly as a viewer.'),
+    b('**Notion“双星记忆系统”**作为可视前端，经 GitHub Actions 从仓库单向同步：脚本只用标准库、不依赖 AI，按“仓库键”更新，不删不新建，避免重复。','**The Notion “twin-star memory system”** serves as the visual front end, synced one-way from the repository by GitHub Actions: a standard-library script with no AI dependency, updating by repository key and never deleting or creating, so nothing duplicates.'),
+    b('**三维和平面星图**（starmap）：把知识点和项目的关系做成可旋转的图。','**3D and 2D starmaps:** knowledge entries and projects drawn as a graph you can rotate and explore.'),
+    b('**对接 AI：**仓库内的规则文件规定 AI 开工先读、收工写回，并带“交接”口令；记忆服务启动时自动下发这些规则，Codex、Claude 和 Grok Bot 共用同一套背景。','**Wired to AI agents:** a rules file in the repository tells an agent to read first and write back when done, with a handover phrase; the memory service delivers those rules on connection so Codex, Claude and Grok Bot share one background.')]},
+  {t:'table',h:b('关键数字','Key figures'),head:[b('项目','Item'),b('数量','Count'),b('说明','Note')],rows:[
+    [b('结构化知识条目','Knowledge entries'),'77',b('6 个大类','6 top-level categories')],
+    [b('个人经历档案','Career-profile files'),'15',b('另有 Notion 经历库 119 条','plus 119 records in Notion')],
+    [b('收藏夹基线 / 已处理视频','Favourites baseline / processed'),'94 / 78',b('抖音收藏夹','Douyin favourites')],
+    [b('流水线代码 / 测试','Pipeline code / tests'),'≈ 1,705 lines / 34',b('Python','Python')],
+    [b('技能文件 / 项目目录','Skill files / project folders'),'16 / 7',b('带索引','indexed')]]},
+  {t:'timeline',h:b('时间线','Timeline'),items:[
+    ['2026.10.24',b('建档，开始整理个人经历与抖音收藏知识库。','Archive created; personal career history and the Douyin knowledge base begin.')],
+    ['2026.10.25 – 26',b('批量整理收藏夹，知识库增至 77 条。','Favourites batch-processed; the knowledge base reaches 77 entries.')],
+    ['2026.11.04',b('合并项目、按母库更新档案，建成 Notion 前端并完成仓库到 Notion 的同步；命令行流水线第一步完成。','Projects merged, archive updated from the master database, Notion front end built and repository-to-Notion sync completed; first step of the command-line pipeline done.')],
+    ['2026.11.08',b('接入对话原文存档、每日维护、云端备份和每周整理（见 AI 共享记忆系统）。','Raw-transcript archive, daily maintenance, cloud backup and weekly consolidation connected (see the shared AI memory system).')]]},
+  {t:'text',h:b('与 AI 共享记忆系统的关系','Relation to the shared AI memory system'),p:[
+    b('两者在同一个仓库里：共享记忆系统是底层的服务和自动化（MCP 记忆服务、对话存档、每日备份），个人知识库是上层的内容，也就是我的经历档案和整理出的知识。','Both live in one repository: the shared memory system is the infrastructure underneath (the MCP memory service, transcript archive and daily backup), and the personal knowledge base is the content on top, my career archive and the distilled knowledge.')]},
+  {t:'text',h:b('我的决策','My decisions'),p:[
+    b('我定义目标和预期（留住经历和收藏、可接入各 AI、尽量无感成长），决定以仓库为正本、Notion 单向同步、不依赖单一 AI 的架构，提供并逐条确认经历母库，并自己完成各平台的登录和授权。','I set the goals (keep my history and saved material, work with every AI, grow with little upkeep), chose the architecture of a repository as the source of truth, one-way Notion sync and no single-AI dependency, supplied and confirmed the career master database line by line, and handled each platform’s sign-in and authorisation myself.')]},
+  {t:'tags',tags:['Knowledge management','Python pipeline','Notion API','GitHub Actions','faster-whisper','Starmap','Data de-duplication','Fact-checking']}
+ ]},
+
+{id:'douyin',no:'09',grp:'tools',
+ title:b('抖音收藏夹自动总结','Automatic Summaries for Douyin Collections'),
+ sub:b('短视频信息的结构化提取','Structured extraction from short videos'),
+ kind:b('个人工具','Personal tool'), period:'2026.11',
+ role:b('需求定义、结果核验与下游使用','Requirements, verification of output and downstream use'),
+ status:b('已投入使用','In use'),
+ tools:'LLM · Markdown',
+ lead:b('把抖音收藏夹里的求职类短视频自动转成按条目整理的文字总结，再从中提取公司、平台、截止日期和行动项。',
+        'Turns saved job-hunting videos on Douyin into itemised written summaries, then extracts companies, platforms, deadlines and action items from them.'),
+ secs:[
+  {t:'list',h:b('流程','Flow'),items:[
+    b('**输入：**抖音收藏夹中的求职类视频。','**Input:** job-hunting videos saved in a Douyin collection.'),
+    b('**输出：**按视频分条的 Markdown 总结，保留来源链接，便于检索和二次处理。','**Output:** per-video Markdown summaries that keep the source links, easy to search and reprocess.'),
+    b('**下游使用：**从总结里提取新增公司、招聘平台和避坑提示，整理成岗位表和行动清单，用于 2026 秋招的信息筛选。','**Downstream use:** new companies, hiring platforms and warnings are extracted from the summaries into a job table and an action list, used to screen information during the 2026 autumn recruitment.'),
+    b('**可信度处理：**来自视频画面的截止日期统一标注“投前去官网核实”，不当作最终事实。','**Reliability handling:** deadlines read from video frames are marked “verify on the official site before applying” and never treated as final.')]},
+  {t:'tags',tags:['LLM summarisation','Information extraction','Markdown','Source tracing']}
+ ]},
+
+{id:'courses',no:'10',grp:'course',
+ title:b('硕士课程项目汇总','Master’s Coursework Summary'),
+ sub:b('机器人、精益制造、深度学习','Robotics, lean manufacturing, deep learning'),
+ kind:b('课程项目','Coursework'), period:'2026.02 – 2026.12',
+ role:b('个人完成或小组成员','Individual or team member'),
+ status:b('各课程作业均已提交','All assignments submitted'),
+ tools:'Visual Components · ABB · KUKA · MATLAB · Arduino · AnyLogic · Bambu X1 Carbon · Python · Jupyter',
+ lead:b('莫纳什应用工程硕士阶段，每门课程做了什么，简要如下。',
+        'What I did in each course of the Monash Master of Applied Engineering, in brief.'),
+ secs:[
+  {t:'table',h:b('课程','Courses'),head:[b('课程','Course'),b('做了什么','What I did')],rows:[
+    [b('Advanced Robotics in Manufacturing 制造业先进机器人','Advanced Robotics in Manufacturing'),
+     b('在 Visual Components 中对 KUKA KR 16-2 做离线编程与仿真：动作序列、抓取放置和点位验证。另与两位组员用实体 ABB 机器人完成汉字书写项目。','Offline programming and simulation of a KUKA KR 16-2 in Visual Components: motion sequences, pick-and-place and point-sequence verification. In a team of three, also had a physical ABB robot write Chinese characters.')],
+    [b('Lean Manufacturing 精益制造','Lean Manufacturing'),
+     b('为 3D 打印车间做流程改善分析，负责现状分析、时间研究和 TPM；并用 Bambu X1 Carbon 一次打印 25 个零件，配合卡尺测量完成工艺实验。','A process-improvement analysis for a 3D-printing workshop, covering the current state, time study and TPM; plus a 25-part single-run print on a Bambu X1 Carbon with caliper measurement.')],
+    [b('Robot kinematics 机器人运动学与舵机机器人实验','Robot kinematics and servo-robot labs'),
+     b('计算 2R 机器人的速度、力映射和奇异位形；用 ROBOTIS BIOLOID 做实体机器人的动作设计、连接与运行。','Calculated velocity, force mapping and singular positions of a 2R robot; designed, connected and ran motions on a physical ROBOTIS BIOLOID robot.')],
+    [b('Computer vision 计算机视觉实验','Computer vision labs'),
+     b('用 MATLAB 做图像处理和相机标定（20 张图像与误差分析），并完成特征匹配、几何变换和三维重建。','Image processing and camera calibration in MATLAB (20 images with error analysis), plus feature matching, geometric transforms and 3D reconstruction.')],
+    [b('IoT 物联网实验','IoT lab'),
+     b('用 Arduino UNO R4 WiFi 和 DHT11 采集温湿度，经 Wi-Fi 写入 InfluxDB Cloud，在 Grafana Cloud 上做实时看板，并比较 ThingsBoard 等平台的用途。','Collected temperature and humidity with an Arduino UNO R4 WiFi and a DHT11, wrote to InfluxDB Cloud over Wi-Fi, built a live Grafana Cloud dashboard and compared platforms such as ThingsBoard.')],
+    [b('Manufacturing systems and quality 制造系统与质量','Manufacturing systems and quality'),
+     b('用 AnyLogic 做半导体制造与 3D 打印流程的离散事件仿真；做价值流、SMED、OEE、SPC、Cp/Cpk 和 Gage R&R 分析。','Discrete-event simulation of semiconductor-manufacturing and 3D-printing flows in AnyLogic; value-stream, SMED, OEE, SPC, Cp/Cpk and Gage R&R analysis.')],
+    [b('Supply chain 供应链管理','Supply chain management'),
+     b('做零售销量的需求预测与误差分析，分析 CPFR、VMI 和牛鞭效应案例，并设计备用供应商的 AI 推荐逻辑。','Retail demand forecasting with error analysis, CPFR, VMI and bullwhip case studies, and a design for AI recommendation of backup suppliers.')],
+    [b('Neural Networks and Deep Learning 神经网络与深度学习','Neural Networks and Deep Learning'),
+     b('完成四个作业：迭代加权最小二乘、人脸关键点检测、交通标志分类、语音指令识别。语音指令识别在课程 Kaggle 比赛中公榜得分 0.98750。','Four assignments: iteratively reweighted least squares, facial landmark detection, traffic-sign classification and speech-command recognition. The speech-command model scored 0.98750 on the course Kaggle public leaderboard.')]]},
+  {t:'tags',tags:['KUKA','ABB','Visual Components','Kinematics','MATLAB','IoT','AnyLogic','SPC','Supply chain','Deep learning','Kaggle']}
+ ]}
+];
+
+/* ---------- about content ---------- */
+var EDU=[
+ {d:'2026.02 – 2027.01',n:b('莫纳什大学马来西亚校区','Monash University Malaysia'),
+  p:b('应用工程硕士，工业人工智能与机器人方向，预计 2027 年 1 月毕业。课程包括神经网络与深度学习、制造业中的先进机器人、精益制造、增材制造。',
+      'Master of Applied Engineering, Industrial AI and Robotics, expected January 2027. Courses include neural networks and deep learning, advanced robotics in manufacturing, lean manufacturing and additive manufacturing.')},
+ {d:'2019.09 – 2023.06',n:b('大连海洋大学','Dalian Ocean University'),
+  p:b('轮机工程，工学学士。','B.Eng. in Marine Engineering.')}
+];
+var EXP=[
+ {d:'2026.07 – 2026.12',n:b('莫纳什大学马来西亚校区 中国学生会','Monash University Malaysia Chinese Students Association'),
+  p:b('公关部部长，参与组织文化晚会等活动。','Head of Public Relations; helped organise events including a cultural evening.')},
+ {d:b('本科期间','Undergraduate years'),n:b('大连海洋大学 学生会','Student union, Dalian Ocean University'),
+  p:b('参与学生会的组织工作。','Took part in the student union’s organising work.')}
+];
+var CERT=[{d:'IASSC',n:b('PeopleCert – IASSC Certified Lean Practitioner','PeopleCert – IASSC Certified Lean Practitioner'),
+  p:b('精益实践者认证。','Certified Lean Practitioner.')}];
+var SK=[
+ [b('机械设计与增材制造','Mechanical design and additive manufacturing'),
+  b('**机械结构设计与原型开发**；SolidWorks；**FDM 3D 打印与 Bambu Studio 切片**（PLA、PETG、树脂）；**产品原型装配与测试**；**Mitutoyo 卡尺尺寸测量**','**Mechanical structure design and prototyping**; SolidWorks; **FDM 3D printing and Bambu Studio slicing** (PLA, PETG, resin); **prototype assembly and testing**; **Mitutoyo caliper measurement**'),
+  b('耳镜、精益课程','Otoscope, lean course')],
+ [b('成像与光学测试','Imaging and optical testing'),
+  b('**微型摄像头选型与测试**；**光学成像性能测试**（MTF50、时域 SNR、FOV、FPS、温升）；OpenCV 图像预览与处理','**Micro-camera selection and testing**; **optical imaging performance tests** (MTF50, temporal SNR, FOV, FPS, temperature rise); OpenCV image preview and processing'),
+  b('耳镜','Otoscope')],
+ [b('计算机视觉','Computer vision'),
+  b('MATLAB 与 Computer Vision Toolbox：相机标定（20 张图像与误差分析）、特征匹配、几何变换、三维重建','MATLAB and Computer Vision Toolbox: camera calibration (20 images with error analysis), feature matching, geometric transforms, 3D reconstruction'),
+  b('课程实验','Course labs')],
+ [b('工业机器人与运动学','Industrial robotics and kinematics'),
+  b('**Visual Components Premium OLP 5.0**（含 Python / AutoBuilder）；KUKA KR 16-2 离线编程（PTP/LIN、抓取放置、路径调试）；ABB IRB 120 示教器操作、轨迹调整与书写实验；ROBOTIS BIOLOID（RoboPlus Motion、Bus Servo Control）动作与关节姿态调试；2R 机器人速度、力映射与奇异位形的 Jacobian 分析','**Visual Components Premium OLP 5.0** (with Python and AutoBuilder); KUKA KR 16-2 offline programming (PTP/LIN, pick-and-place, path tuning); ABB IRB 120 teach-pendant operation, trajectory tuning and writing experiment; ROBOTIS BIOLOID (RoboPlus Motion, Bus Servo Control) motion and joint-posture tuning; Jacobian analysis of velocity, force mapping and singular positions for a 2R robot'),
+  b('ABB 与 KUKA 实验','ABB and KUKA labs')],
+ [b('工程仿真','Engineering simulation'),
+  b('**AMESim**；液压系统动态仿真（阀芯质量、阻尼孔、弹簧刚度参数分析）；AnyLogic PLE 离散事件仿真（半导体制造与 3D 打印流程）','**AMESim**; dynamic simulation of hydraulic systems (spool mass, damping orifice, spring stiffness); AnyLogic PLE discrete-event simulation (semiconductor manufacturing and 3D-printing flows)'),
+  b('本科毕设、课程','Thesis, coursework')],
+ [b('精益与质量工程','Lean and quality engineering'),
+  b('**价值流分析（VSM）**；生产节拍与瓶颈分析；SMED；TPM / OEE；Kanban 与 Push-Pull；SPC（I-MR、p 控制图）；Cp / Cpk；Gage R&R；Pareto 与鱼骨图；5S / SOP / 目视化；IASSC 精益实践者认证','**Value stream mapping (VSM)**; takt time and bottleneck analysis; SMED; TPM / OEE; Kanban and push-pull; SPC (I-MR, p charts); Cp / Cpk; Gage R&R; Pareto and fishbone; 5S / SOP / visual management; IASSC Lean Practitioner'),
+  b('精益课程','Lean course')],
+ [b('机器学习与深度学习','Machine learning and deep learning'),
+  b('Python；PyTorch、torchvision、torchaudio；CNN（GTSRB 43 类）；EfficientNet-B0（人脸关键点）；Wav2Vec2（语音指令）；MLP；SGD / AdamW；IRLS 鲁棒拟合；RMSE、MSE、准确率、混淆矩阵与数据增强；CUDA 12.6 环境配置；**Jupyter Notebook**；Kaggle','Python; PyTorch, torchvision, torchaudio; CNN (GTSRB, 43 classes); EfficientNet-B0 (face landmarks); Wav2Vec2 (speech commands); MLP; SGD / AdamW; robust IRLS fitting; RMSE, MSE, accuracy, confusion matrix and data augmentation; CUDA 12.6 setup; **Jupyter Notebook**; Kaggle'),
+  b('神经网络课程','Neural networks course')],
+ [b('物联网与数据','IoT and data'),
+  b('Arduino UNO R4 WiFi、Arduino IDE / C++、DHT11 采集；InfluxDB Cloud 存储；Grafana Cloud 实时看板；**Microsoft Excel** 数据分析；ThingsBoard 平台选型对比','Arduino UNO R4 WiFi, Arduino IDE / C++, DHT11 sensing; InfluxDB Cloud storage; Grafana Cloud live dashboard; **Microsoft Excel** analysis; ThingsBoard platform comparison'),
+  b('物联网课程实验','IoT course lab')],
+ [b('软件与工具链','Software and toolchain'),
+  b('Python（Conda / pip、VS Code）；Git、GitHub 与 GitHub Pages；React、TypeScript、Vite；Windows 桌面应用的测试与交付；局域网网页实时影像共享；Swift / Objective-C / Bash 与 macOS 后台服务（launchd）；CadQuery 参数化建模','Python (Conda / pip, VS Code); Git, GitHub and GitHub Pages; React, TypeScript, Vite; testing and delivery of Windows desktop apps; LAN web live-image sharing; Swift, Objective-C and Bash with macOS background services (launchd); CadQuery parametric modelling'),
+  b('耳镜软件、简历生成器、padbook','Otoscope app, resume tool, padbook')],
+ [b('AI 应用工程','Applied AI engineering'),
+  b('**OpenAI Codex、Grokbot、DeepSeek API 接入**；**软件需求分析与功能测试**；**软件产品设计与迭代**；提示词与交接文档设计；跨 AI 代理的共享记忆','**OpenAI Codex, Grokbot, DeepSeek API integration**; **software requirements analysis and functional testing**; **software product design and iteration**; prompt and handover-document design; shared memory across AI agents'),
+  b('SpeakBuddy、简历生成器、桌面 AI 工具、AI 共享记忆系统、个人知识库','SpeakBuddy, resume tool, desktop AI toolkit, shared memory system, personal knowledge base')],
+ [b('供应链与运营分析','Supply chain and operations analysis'),
+  b('需求预测与误差指标（MAPE、MSE，零售销量预测）；CPFR、VMI 与牛鞭效应案例分析；备用供应商 AI 推荐逻辑与伪代码设计','Demand forecasting and error metrics (MAPE, MSE, retail sales); CPFR, VMI and bullwhip case analysis; AI recommendation logic and pseudocode for backup suppliers'),
+  b('供应链课程','Supply chain course')],
+ [b('沟通与文档','Communication and documentation'),
+  b('**工程技术报告与英文展示**；**Microsoft Word、PowerPoint**；EndNote 文献管理；XMind；draw.io、Visio 流程与价值流绘图；**跨部门沟通与活动组织**','**Engineering reports and English presentations**; **Microsoft Word and PowerPoint**; EndNote references; XMind; draw.io and Visio for flow and value-stream diagrams; **cross-team communication and event organising**'),
+  b('课程、论文、学生会','Courses, papers, student association')],
+ [b('工业自动化','Industrial automation'),
+  b('自动化产线设备的运行与基础维护','Operation and basic upkeep of automated production equipment'),
+  b('生产现场实践','Shop-floor practice')],
+ [b('语言','Languages'),
+  b('中文母语；英语用于论文写作和会议口头报告','Chinese native; English for paper writing and conference presentation'),
+  b('IECBES 论文','IECBES paper')]
+];
+
+/* ---------- renderers ---------- */
+function section(num,h,inner,wide){
+  return '<section class="sec"><h2><span>'+esc(num)+'</span>'+esc(T(h))+'</h2><div class="body'+(wide?' wide':'')+'">'+inner+'</div></section>';
+}
+function renderSec(s,i){
+  var num=(i<9?'0':'')+(i+1), h=s.h, out='', k;
+  if(s.t==='text'){
+    for(k=0;k<s.p.length;k++) out+='<p>'+rich(s.p[k])+'</p>';
+    return section(num,h,out);
+  }
+  if(s.t==='list'){
+    out='<ul class="ls'+(s.note?' note':'')+'">';
+    for(k=0;k<s.items.length;k++) out+='<li>'+rich(s.items[k])+'</li>';
+    return section(num,h,out+'</ul>');
+  }
+  if(s.t==='table'){
+    out='<div class="scroll"><table class="tbl"><thead><tr>';
+    for(k=0;k<s.head.length;k++) out+='<th>'+esc(T(s.head[k]))+'</th>';
+    out+='</tr></thead><tbody>';
+    s.rows.forEach(function(r){
+      out+='<tr>';
+      r.forEach(function(c,ci){
+        var isNum=(typeof c==='string');
+        out+='<td'+(isNum?' class="num"':'')+'>'+esc(T(c))+'</td>';
+      });
+      out+='</tr>';
+    });
+    return section(num,h,out+'</tbody></table></div>',true);
+  }
+  if(s.t==='timeline'){
+    out='<ul class="tl">';
+    s.items.forEach(function(it){ out+='<li><span class="d">'+esc(it[0])+'</span><span>'+rich(it[1])+'</span></li>'; });
+    return section(num,h,out+'</ul>',true);
+  }
+  if(s.t==='diagram'){
+    out='<div class="scroll dia">'+DIAG[s.fn]()+'</div>'+(s.cap?'<p class="dia-cap">'+esc(T(s.cap))+'</p>':'');
+    return section(num,h,out,true);
+  }
+  if(s.t==='fig'){
+    out='<div class="figs'+(s.cols?' c'+s.cols:'')+'">'+s.items.map(function(f){return '<figure'+(f.sm?' class="sm"':'')+'><img src="'+esc(f.src)+'" alt="'+esc(T(f.cap))+'"><figcaption>'+esc(T(f.cap))+'</figcaption></figure>'}).join('')+'</div>';
+    return section(num,h,out,true);
+  }
+  if(s.t==='tags'){
+    out='<div class="tags">'+s.tags.map(function(t){return '<span>'+esc(t)+'</span>'}).join('')+'</div>';
+    return section(num,b('关键词','Keywords'),out);
+  }
+  return '';
+}
+function cell(lb,vl,cls){return '<div class="'+(cls||'')+'"><span class="lb">'+esc(T(lb))+'</span><span class="vl">'+vl+'</span></div>'}
+function projectView(p){
+  var idx=P.indexOf(p), prev=P[(idx+P.length-1)%P.length], next=P[(idx+1)%P.length], i, secs='';
+  var linkHtml='';
+  if(p.links){ linkHtml=p.links.map(function(l){return '<a href="'+esc(l.u)+'" target="_blank" rel="noopener">'+esc(l.l)+'</a>'}).join(' · '); }
+  var tb='<div class="tb">'+
+    cell(U.lbProject,esc(p.no)+' / '+(P.length<10?'0':'')+P.length,'')+
+    cell(U.lbType,esc(T(p.kind)),'')+
+    cell(U.lbPeriod,esc(T(p.period)),'')+
+    cell(U.lbRole,esc(T(p.role)),'w3')+
+    cell(U.lbStatus,esc(T(p.status)),'w3')+
+    cell(U.lbTools,esc(p.tools),(p.links||p.supervisor)?'w3':'w6')+
+    (p.links?cell(U.lbLink,'<span class="linkline">'+linkHtml+'</span>','w3'):'')+
+    (p.supervisor&&!p.links?cell(b('指导','Supervision'),esc(T(p.supervisor).replace(/^[^:：]*[:：]\s*/,'')),'w3'):'')+
+    '</div>';
+  for(i=0;i<p.secs.length;i++) secs+=renderSec(p.secs[i],i);
+  return '<a class="back mono" href="'+href('home')+'">'+esc(T(U.back))+'</a>'+
+    '<div class="ph"><div class="mono mute">'+esc(T(U.grp[p.grp]))+'</div><h1>'+esc(T(p.title))+'</h1><p class="lead">'+esc(T(p.lead))+'</p>'+tb+'</div>'+
+    secs+
+    '<nav class="pn" aria-label="projects"><a href="'+href(prev.id)+'"><span class="mono mute">← '+esc(T(U.prev))+'</span><span class="t">'+esc(T(prev.title))+'</span></a>'+
+    '<a href="'+href(next.id)+'"><span class="mono mute">'+esc(T(U.next))+' →</span><span class="t">'+esc(T(next.title))+'</span></a></nav>';
+}
+function indexHtml(){
+  var order=['research','product','tools','course'], out='';
+  order.forEach(function(g){
+    out+='<div class="grp mono">'+esc(T(U.grp[g]))+'</div><div class="idx">';
+    P.filter(function(p){return p.grp===g}).forEach(function(p){
+      out+='<a href="'+href(p.id)+'"><span class="n">'+p.no+'</span><span class="t">'+esc(T(p.title))+'<small>'+esc(T(p.sub))+'</small></span>'+
+           '<span class="k">'+esc(T(p.kind))+'</span><span class="d">'+esc(T(p.period))+'</span><span class="ar">→</span></a>';
+    });
+    out+='</div>';
+  });
+  return out;
+}
+function rowsHtml(list){
+  return '<div class="rows">'+list.map(function(r){
+    return '<div class="row"><span class="d">'+esc(T(r.d))+'</span><div><b>'+esc(T(r.n))+'</b><p>'+esc(T(r.p))+'</p></div></div>';
+  }).join('')+'</div>';
+}
+function skillsHtml(){
+  var out='<div class="scroll"><table class="tbl sk"><thead><tr>'+U.skHead.map(function(h){return '<th>'+esc(T(h))+'</th>'}).join('')+'</tr></thead><tbody>';
+  SK.forEach(function(r){ out+='<tr><td><b>'+esc(T(r[0]))+'</b></td><td>'+rich(r[1])+'</td><td class="mute">'+esc(T(r[2]))+'</td></tr>'; });
+  return out+'</tbody></table></div><p class="note" style="margin-top:12px">'+esc(T(U.skNote))+'</p>';
+}
+var GL=[
+ [b('机械与增材制造','Mechanical and additive'),'SolidWorks · CadQuery 参数化建模 · FDM 3D 打印（PLA / PETG / TPU）· 卡尺测量'],
+ [b('成像与测试','Imaging and testing'),'MTF50 · 时域 SNR · FOV / FPS · OpenCV · MATLAB 相机标定'],
+ [b('机器人','Robotics'),'Visual Components · KUKA KR 16-2 · ABB IRB 120 · Jacobian'],
+ [b('仿真与精益','Simulation and lean'),'AMESim · AnyLogic · VSM · TPM / OEE · SPC · Gage R&R'],
+ [b('机器学习','Machine learning'),'PyTorch · CNN · EfficientNet · Wav2Vec2 · Kaggle'],
+ [b('AI 应用工程','Applied AI'),'Codex · DeepSeek API · 提示词与交接文档 · 跨代理记忆']
+];
+function glanceHtml(){
+  return '<div class="gl">'+GL.map(function(g){return '<div><span class="lb">'+esc(T(g[0]))+'</span><span class="vl">'+esc(T(g[1]))+'</span></div>'}).join('')+'</div>';
+}
+var ABOUT_P=[
+ b('本科读轮机工程，之后到莫纳什大学马来西亚校区读工业人工智能与机器人方向的硕士。',
+   'I studied marine engineering as an undergraduate, then began a master’s in Industrial AI and Robotics at Monash University Malaysia.'),
+ b('我想做的是能交付、能真正用起来的工程产品。耳镜项目就是按这个思路做的：先有真实的教学需求，再做样机、测试和伦理验证，最后落到可用的软件和文档。轮机工程给了我机械系统和设备运维的基础，硕士阶段补上了机器人、机器视觉和深度学习。',
+   'I want to build engineering products that ship and get used. The otoscope followed that path: a real teaching need, then prototypes, tests and ethics validation, then usable software and documentation. Marine engineering gave me a base in mechanical systems and equipment upkeep; the master’s added robotics, machine vision and deep learning.')
+];
+var BEYOND=b('街头摄影，更在意真实生活场景和构图，熟悉相机的曝光、对焦和闪光灯，不太追器材参数。也关心电脑硬件、机器人、3D 打印和产品设计。',
+             'Street photography, more about real scenes and composition than gear specs; I am comfortable with exposure, focus and flash. I also follow computer hardware, robotics, 3D printing and product design.');
+
+function homeView(){
+  var facts=[
+    ['IECBES 2026',b('会议论文已录用，12 月在吉隆坡口头报告','Paper accepted; oral talk in Kuala Lumpur, December')],
+    ['MUHREC 53706',b('人体研究伦理审批通过','Human research ethics approved')],
+    ['180 / 180',b('耳镜软件 V3.2.1 自动化测试全部通过','Otoscope software V3.2.1, all automated tests passing')],
+    ['0.98750',b('语音指令识别，课程 Kaggle 公榜得分','Speech commands, course Kaggle public score')]
+  ];
+  return '<section class="hero"><div><p class="kicker mono">'+esc(T(U.kicker))+'</p><h1>Ran Ruiqian</h1>'+
+    '<p class="lead">'+esc(T(U.leadHero))+'</p><p class="lead2">'+esc(T(U.lead2Hero))+'</p>'+
+    '<div class="cta"><a class="btn solid" href="'+href('otoscope')+'">'+esc(T(U.ctaMain))+'</a><a class="btn" href="'+href('about')+'">'+esc(T(U.ctaAbout))+'</a></div></div>'+
+    '<div class="reticle-box">'+reticle()+'<p class="reticle-cap">'+esc(T(U.reticleCap))+'</p></div></section>'+
+    '<div class="facts">'+facts.map(function(f){return '<div class="fact"><span class="v">'+esc(f[0])+'</span><span class="l">'+esc(T(f[1]))+'</span></div>'}).join('')+'</div>'+
+    '<div class="sh"><h2>'+esc(T(U.allWork))+'</h2><span class="mono">'+P.length+' / '+P.length+'</span></div>'+
+    '<p class="note" style="margin:14px 0 0">'+esc(T(U.workSub))+'</p>'+indexHtml()+
+    '<div class="sh"><h2>'+esc(T(U.glanceH))+'</h2><a class="mono" href="'+href('about')+'">'+esc(T(U.glanceAll))+'</a></div>'+glanceHtml()+
+    '<div class="sh"><h2>'+esc(T(U.aboutH))+'</h2><a class="mono" href="'+href('about')+'">'+esc(T(U.aboutSub))+' →</a></div>'+
+    '<div class="cols"><div></div><div>'+ABOUT_P.map(function(p){return '<p>'+esc(T(p))+'</p>'}).join('')+'</div></div>';
+}
+function aboutView(){
+  return '<a class="back mono" href="'+href('home')+'">'+esc(T(U.back))+'</a>'+
+    '<div class="ph"><div class="mono mute">'+esc(T(U.aboutSub))+'</div><h1>'+esc(T(U.aboutH))+'</h1></div>'+
+    '<div class="cols" style="margin-top:20px"><div></div><div>'+ABOUT_P.map(function(p){return '<p>'+esc(T(p))+'</p>'}).join('')+'</div></div>'+
+    '<div class="sh"><h2>'+esc(T(U.edu))+'</h2></div>'+rowsHtml(EDU)+
+    '<div class="sh"><h2>'+esc(T(U.exp))+'</h2></div>'+rowsHtml(EXP)+
+    '<div class="sh"><h2>'+esc(T(U.cert))+'</h2></div>'+rowsHtml(CERT)+
+    '<div class="sh"><h2>'+esc(T(U.skills))+'</h2></div><div style="margin-top:18px">'+skillsHtml()+'</div>'+
+    '<div class="sh"><h2>'+esc(T(U.beyond))+'</h2></div><div class="cols"><div></div><div><p>'+esc(T(BEYOND))+'</p></div></div>';
+}
+function contactHtml(){
+  function c(lb,vl){return '<div><span class="lb">'+esc(T(lb))+'</span><span class="vl">'+vl+'</span></div>'}
+  return '<section class="contact" id="contact"><h2>'+esc(T(U.contactH))+'</h2><div class="cgrid">'+
+    c(U.cEmail,'<a href="mailto:moreless77777@gmail.com">moreless77777@gmail.com</a>')+
+    c(U.cGit,'<a href="https://github.com/RanRuiqian" target="_blank" rel="noopener">github.com/RanRuiqian</a>')+
+    c(U.cKaggle,'ruiqianran')+
+    c(U.cLoc,esc(T(U.cLocV)))+
+    c(U.cWant,esc(T(U.cWantV)))+
+    '</div></section><footer class="foot">'+esc(T(U.foot))+'</footer>';
+}
+
+/* ---------- router ---------- */
+function parse(){
+  var h=decodeURIComponent((location.hash||'').replace(/^#/,'')), en=false;
+  if(h==='en'){en=true;h='home'}
+  else if(/-en$/.test(h)){en=true;h=h.slice(0,-3)}
+  if(!h) h='home';
+  return {route:h,en:en};
+}
+function navHtml(route){
+  function a(r,l){return '<a href="'+href(r)+'"'+(route===r?' aria-current="page"':'')+'>'+esc(T(l))+'</a>'}
+  var other=EN?'':'-en', cur=route==='home'?'home':route;
+  var langHref='#'+cur+other;
+  return a('home',U.work)+a('about',U.about)+'<button type="button" id="goContact">'+esc(T(U.contact))+'</button>'+
+    '<a class="lang" id="langBtn" href="'+langHref+'">'+esc(T(U.lang))+'</a>';
+}
+function render(){
+  var st=parse(), p;
+  EN=st.en;
+  document.documentElement.lang=EN?'en':'zh-CN';
+  p=P.filter(function(x){return x.id===st.route})[0];
+  var route=p?p.id:(st.route==='about'?'about':'home');
+  document.getElementById('brand').setAttribute('href',href('home'));
+  document.getElementById('nav').innerHTML=navHtml(p?'home':route);
+  document.getElementById('app').innerHTML=(p?projectView(p):(route==='about'?aboutView():homeView()))+contactHtml();
+  var gc=document.getElementById('goContact');
+  if(gc) gc.addEventListener('click',function(){var el=document.getElementById('contact'); if(el) el.scrollIntoView({behavior:'smooth'})});
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',render);
+render();
+})();
+</script>
+</body>
+</html>
