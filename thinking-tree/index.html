@@ -61,7 +61,7 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stro
 .node .pv .ext{position:absolute;right:6px;bottom:6px;font-size:10px;font-weight:700;letter-spacing:.04em;padding:2px 6px;border-radius:5px;background:var(--ink);color:var(--card)}
 .node .pv .gen{display:flex;flex-direction:column;align-items:center;gap:4px;color:var(--mute);font-size:12px}
 .chrome{position:fixed;z-index:10;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow2)}
-#top{left:16px;top:14px;right:16px;display:flex;align-items:center;gap:6px;padding:6px;flex-wrap:wrap;max-width:max-content}
+#top{z-index:12;left:16px;top:14px;right:16px;display:flex;align-items:center;gap:6px;padding:6px;flex-wrap:wrap;max-width:max-content}
 .brand{display:flex;align-items:center;gap:8px;padding:0 8px 0 6px;font-weight:650;font-size:15px;white-space:nowrap}
 .brand b{width:26px;height:26px;border-radius:8px;background:var(--ink);color:var(--card);display:grid;place-items:center;font-size:13px}
 #mapSel{border:1px solid var(--line);background:var(--soft);border-radius:9px;padding:6px 8px;max-width:210px;height:34px}
@@ -132,6 +132,14 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stro
 .toast.on{opacity:1;transform:translateX(-50%)}
 #drophint{position:fixed;inset:12px;border:2px dashed var(--acc);border-radius:18px;z-index:30;display:none;align-items:center;justify-content:center;font-size:18px;color:var(--acc);background:color-mix(in srgb,var(--acc) 6%,transparent);pointer-events:none}
 #drophint.on{display:flex}
+#roBar{left:50%;top:74px;transform:translateX(-50%);display:none;align-items:center;gap:10px;padding:6px 6px 6px 14px;font-size:13px;max-width:calc(100% - 32px)}
+body.ro #roBar{display:flex}body.ro .edit{display:none}body.ro .list button:not([data-ro]),body.ro .list hr{display:none}
+#shareM .box{width:min(520px,100%)}#shareM h3{margin:0 0 6px;font-size:17px}#shareM .sm{color:var(--mute);font-size:13px;line-height:1.7;margin:0 0 12px}
+#shareM ol{margin:0 0 12px;padding-left:1.2em;font-size:13px;line-height:1.8}#shareM a{color:var(--acc)}
+#shareM input[type=text],#shareM input[type=password]{width:100%;border:1px solid var(--line);border-radius:9px;background:var(--soft);padding:9px 10px;margin-bottom:10px}
+#shareM label{display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:10px}
+#shareM .link{display:flex;gap:6px;margin-bottom:10px}#shareM .link input{margin:0;font-size:12px}
+#shareM .row{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 @media (prefers-reduced-motion:reduce){#world.anim .node,.toast,.port{transition:none}}
 @media (max-width:820px){
   .lbl{display:none}#q{width:100px}#mapSel{max-width:120px}.opt{display:none}#top{left:8px;right:8px;top:8px}
@@ -148,10 +156,10 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stro
   <div class="brand"><b>思</b><span class="lbl">思路树</span></div>
   <select id="mapSel" aria-label="切换导图"></select>
   <span class="sep"></span>
-  <button class="ib pri" id="bChild" title="添加子节点（Tab）"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span class="lbl">子节点</span></button>
-  <button class="ib" id="bSib" title="添加同级节点（Enter）"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h10M4 12h10M4 17h6M18 14v6M15 17h6"/></svg><span class="lbl">同级</span></button>
-  <button class="ib" id="bFile" title="插入图片、PDF、Word、Excel（也可以直接把文件拖到画布上）"><svg class="i" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 18v-6M9 15h6"/></svg><span class="lbl">文件</span></button>
-  <button class="ib" id="bDel" title="删除（Delete）"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button>
+  <button class="ib pri edit" id="bChild" title="添加子节点（Tab）"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span class="lbl">子节点</span></button>
+  <button class="ib edit" id="bSib" title="添加同级节点（Enter）"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h10M4 12h10M4 17h6M18 14v6M15 17h6"/></svg><span class="lbl">同级</span></button>
+  <button class="ib edit" id="bFile" title="插入图片、PDF、Word、Excel（也可以直接把文件拖到画布上）"><svg class="i" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M12 18v-6M9 15h6"/></svg><span class="lbl">文件</span></button>
+  <button class="ib edit" id="bDel" title="删除（Delete）"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg></button>
   <span class="sep"></span>
   <button class="ib" id="bUndo" title="撤销（Ctrl+Z）"><svg class="i" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg></button>
   <button class="ib" id="bRedo" title="重做（Ctrl+Shift+Z）"><svg class="i" viewBox="0 0 24 24"><path d="m15 14 5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h3"/></svg></button>
@@ -164,8 +172,8 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stro
   <div class="menu" id="menu">
     <button class="ib" id="bMenu" aria-haspopup="true" title="导图菜单"><svg class="i" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/></svg></button>
     <div class="list chrome">
-      <button data-a="new">新建空白导图</button><button data-a="rename">重命名当前导图</button><button data-a="dup">复制当前导图</button>
-      <hr><button data-a="export">导出 JSON（含文件，用于备份）</button><button data-a="import">导入 JSON</button><button data-a="md">复制为 Markdown 大纲</button>
+      <button data-a="share">分享链接…</button><button data-a="keep" data-ro>保存到我的导图</button><hr><button data-a="new">新建空白导图</button><button data-a="rename">重命名当前导图</button><button data-a="dup">复制当前导图</button>
+      <hr><button data-a="export" data-ro>导出 JSON（含文件，用于备份）</button><button data-a="import">导入 JSON</button><button data-a="md" data-ro>复制为 Markdown 大纲</button>
       <hr><button data-a="seed">载入使用说明</button><button data-a="delmap">删除当前导图</button>
     </div>
   </div>
@@ -196,6 +204,8 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stro
 <input type="file" id="jsonIn" hidden accept=".json,application/json">
 <div class="modal" id="modal" role="dialog" aria-modal="true"><div class="box chrome"><p id="mMsg"></p><input id="mIn"><div class="row"><button class="sb" id="mNo">取消</button><button class="ib pri" id="mOk">确定</button></div></div></div>
 <div class="modal" id="viewer" role="dialog" aria-modal="true"><div class="box chrome"><div class="vh"><b id="vTitle"></b><button class="sb" id="vDl">下载</button><button class="ib" id="vClose" title="关闭"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="stabs" id="vTabs"></div><div class="vb" id="vBody"></div></div></div>
+<div id="roBar" class="chrome"><span>这是别人分享给你的导图，只能查看，改动不会保存。</span><button class="ib pri" id="bKeep">保存一份到我的导图</button></div>
+<div class="modal" id="shareM" role="dialog" aria-modal="true"><div class="box chrome" id="shareBox"></div></div>
 <div id="drophint">松开即可把文件放到这里</div>
 <div class="toast" id="toast" role="status"></div>
 
@@ -208,7 +218,7 @@ const LIBS={pdf:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.
 const $=s=>document.querySelector(s);
 const vp=$('#vp'),world=$('#world'),svg=$('#edges');
 let st={maps:[],cur:null},sel=null,view={x:80,y:90,s:1},query='',editMode=false;
-let undo=[],redo=[],dirty=false,saveT=null,routeCache={key:'',paths:{}},dragging=false;
+let RO=false,undo=[],redo=[],dirty=false,saveT=null,routeCache={key:'',paths:{}},dragging=false;
 const uid=()=>Math.random().toString(36).slice(2,8)+Date.now().toString(36).slice(-4);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const M=()=>st.maps.find(m=>m.id===st.cur);
@@ -231,7 +241,7 @@ function snap(){undo.push(JSON.stringify({n:M().nodes,mode:M().mode}));if(undo.l
 function restore(s){const o=JSON.parse(s);M().nodes=o.n;M().mode=o.mode}
 function doUndo(){if(!undo.length)return;redo.push(JSON.stringify({n:M().nodes,mode:M().mode}));restore(undo.pop());if(!N(sel))sel=roots()[0]?.id;save();anim();render()}
 function doRedo(){if(!redo.length)return;undo.push(JSON.stringify({n:M().nodes,mode:M().mode}));restore(redo.pop());if(!N(sel))sel=roots()[0]?.id;save();anim();render()}
-function save(){clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(st));$('#status').textContent='已自动保存 '+new Date().toTimeString().slice(0,5)}catch(e){$('#status').textContent='浏览器存储已满，请导出备份'}},300)}
+function save(){if(RO)return;clearTimeout(saveT);saveT=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(st));$('#status').textContent='已自动保存 '+new Date().toTimeString().slice(0,5)}catch(e){$('#status').textContent='浏览器存储已满，请导出备份'}},300)}
 
 /* files */
 let dbp=null;
@@ -374,10 +384,10 @@ function nextK(p){const ks=kids(p);return ks.length?ks[ks.length-1].k+1:0}
 function freePos(parent){const ps=size(parent),ks=kids(parent.id).filter(k=>visible(k.id));let y=parent.y;if(ks.length&&parent.o){const l=ks.reduce((a,b)=>a.y+size(a).h>b.y+size(b).h?a:b);y=l.y+size(l).h+VG}return {x:parent.x+ps.w+HG,y}}
 function addNode(p,props={}){const id=uid(),parent=N(p);const n={id,t:'新节点',d:'',p:p||null,o:true,k:nextK(p),x:0,y:0,m:null,...props};
   if(parent&&M().mode==='free'){const q=freePos(parent);n.x=q.x;n.y=q.y}if(parent)parent.o=true;M().nodes[id]=n;return n}
-function addChild(){const s=N(sel);if(!s)return;snap();const n=addNode(s.id);sel=n.id;save();render();ensureVisible(n);focusTitle(true)}
-function addSib(){const s=N(sel);if(!s)return;snap();const n=addNode(s.p);for(const k of kids(s.p))if(k.k>s.k&&k.id!==n.id)k.k++;n.k=s.k+1;if(M().mode==='free'){n.x=s.x;n.y=s.y+size(s).h+VG}sel=n.id;save();render();ensureVisible(n);focusTitle(true)}
+function addChild(){if(RO)return;const s=N(sel);if(!s)return;snap();const n=addNode(s.id);sel=n.id;save();render();ensureVisible(n);focusTitle(true)}
+function addSib(){if(RO)return;const s=N(sel);if(!s)return;snap();const n=addNode(s.p);for(const k of kids(s.p))if(k.k>s.k&&k.id!==n.id)k.k++;n.k=s.k+1;if(M().mode==='free'){n.x=s.x;n.y=s.y+size(s).h+VG}sel=n.id;save();render();ensureVisible(n);focusTitle(true)}
 function focusTitle(fresh){dirty=!!fresh;$('#panel').classList.remove('hide');const i=$('#tIn');setTimeout(()=>{i.focus();i.select()},0)}
-async function del(){const s=N(sel);if(!s)return;if(!s.p&&roots().length<2&&Object.keys(M().nodes).length>1&&false)return;const all=subtree(s.id);
+async function del(){if(RO)return;const s=N(sel);if(!s)return;if(!s.p&&roots().length<2&&Object.keys(M().nodes).length>1&&false)return;const all=subtree(s.id);
   if(Object.keys(M().nodes).length===all.length)return toast('导图里至少要保留一个节点');
   if(all.length>1&&!await ask(`删除“${s.t}”及其下属 ${all.length-1} 个节点？可以撤销。`))return;
   snap();const sib=kids(s.p),i=sib.findIndex(x=>x.id===s.id);for(const n of all)delete M().nodes[n.id];
@@ -392,8 +402,8 @@ function doLayout(){snap();M().mode='auto';anim();render();setTimeout(fit,380);t
 /* view */
 function bounds(){const vis=Object.values(M().nodes).filter(n=>visible(n.id));let x0=Infinity,y0=Infinity,x1=-Infinity,y1=-Infinity;for(const n of vis){const s=size(n);x0=Math.min(x0,n.x);y0=Math.min(y0,n.y);x1=Math.max(x1,n.x+s.w);y1=Math.max(y1,n.y+s.h)}return {x0,y0,x1,y1}}
 const panelW=()=>$('#panel').classList.contains('hide')||innerWidth<=820?0:400;
-function fit(){if(M().mode==='auto')autoLayout();const b=bounds();if(!isFinite(b.x0))return;const pr=panelW();const W=innerWidth-pr-60,H=innerHeight-150;
-  const w=b.x1-b.x0,h=b.y1-b.y0;view.s=Math.max(.45,Math.min(1.1,Math.min(W/w,H/h)));view.x=w*view.s<W?30+(W-w*view.s)/2-b.x0*view.s:40-b.x0*view.s;view.y=h*view.s<H?80+(H-h*view.s)/2-b.y0*view.s:90-b.y0*view.s;applyView()}
+function fit(){if(M().mode==='auto')autoLayout();const b=bounds();if(!isFinite(b.x0))return;const pr=panelW();const top=RO?60:0,W=innerWidth-pr-60,H=innerHeight-150-top;
+  const w=b.x1-b.x0,h=b.y1-b.y0;view.s=Math.max(.45,Math.min(1.1,Math.min(W/w,H/h)));view.x=w*view.s<W?30+(W-w*view.s)/2-b.x0*view.s:40-b.x0*view.s;view.y=top+(h*view.s<H?80+(H-h*view.s)/2-b.y0*view.s:90-b.y0*view.s);applyView()}
 function zoomAt(k,cx,cy){const s=Math.max(.2,Math.min(2.5,view.s*k)),r=s/view.s;view.x=cx-(cx-view.x)*r;view.y=cy-(cy-view.y)*r;view.s=s;applyView()}
 function ensureVisible(n){const s=size(n),pr=panelW();const sx=view.x+n.x*view.s,sy=view.y+n.y*view.s;
   if(sx<20||sx+s.w*view.s>innerWidth-pr-20)view.x+=(innerWidth-pr)/2-(sx+s.w*view.s/2);if(sy<80||sy+s.h*view.s>innerHeight-70)view.y+=innerHeight/2-(sy+s.h*view.s/2);applyView()}
@@ -444,7 +454,7 @@ addEventListener('dragleave',()=>{dc=Math.max(0,dc-1);if(!dc)$('#drophint').clas
 addEventListener('dragover',e=>e.preventDefault());
 addEventListener('drop',async e=>{e.preventDefault();dc=0;$('#drophint').classList.remove('on');const fs=[...(e.dataTransfer?.files||[])];if(!fs.length)return;
   const on=nodeAt(e.clientX,e.clientY);await addFiles(fs,on||sel||roots()[0]?.id,on?null:toW(e.clientX,e.clientY))});
-async function addFiles(fs,parentId,at){snap();let last=null,i=0;for(const f of fs){toast('正在处理：'+f.name);const m=await buildMedia(f);if(at)materialize();const n=addNode(parentId,{t:f.name.replace(/\.[^.]+$/,''),m});
+async function addFiles(fs,parentId,at){if(RO)return toast('只读模式不能添加文件');snap();let last=null,i=0;for(const f of fs){toast('正在处理：'+f.name);const m=await buildMedia(f);if(at)materialize();const n=addNode(parentId,{t:f.name.replace(/\.[^.]+$/,''),m});
     if(at){n.x=Math.round(at.x+i*28);n.y=Math.round(at.y+i*28)}i++;last=n}
   sel=last.id;save();render();ensureVisible(last);toast(fs.length>1?`已添加 ${fs.length} 个文件`:'已添加文件')}
 
@@ -458,7 +468,7 @@ $('#fileIn').onchange=async e=>{const fs=[...e.target.files];e.target.value='';i
   if($('#fileIn').dataset.mode==='replace'){const n=N(sel);snap();const old=n.m;n.m=await buildMedia(fs[0]);if(old)fdel(old.key);save();render();toast('已替换文件')}else await addFiles(fs,sel||roots()[0].id,null)};
 $('#mediaBox').addEventListener('click',async e=>{const b=e.target.closest('[data-act],[data-open]');if(!b)return;const n=N(sel);
   if(b.dataset.open||b.dataset.act==='open')openViewer(n.id);
-  if(b.dataset.act==='replace'){$('#fileIn').dataset.mode='replace';$('#fileIn').click()}
+  if(RO&&b.dataset.act!=='open')return;if(b.dataset.act==='replace'){$('#fileIn').dataset.mode='replace';$('#fileIn').click()}
   if(b.dataset.act==='remove'&&await ask('移除这个节点里的文件？')){snap();fdel(n.m.key);n.m=null;save();render()}});
 $('#vClose').onclick=closeViewer;$('#viewer').addEventListener('click',e=>{if(e.target.id==='viewer')closeViewer()});
 document.querySelectorAll('.seg [data-l]').forEach(b=>b.onclick=()=>{level(+b.dataset.l);setTimeout(fit,380)});
@@ -480,6 +490,8 @@ $('#menu .list').addEventListener('click',async e=>{const b=e.target.closest('bu
   if(a==='export'){toast('正在打包…');const files={};for(const n of Object.values(m.nodes))if(n.m){const bl=await fget(n.m.key).catch(()=>null);if(bl)files[n.m.key]=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(bl)})}
     const blob=new Blob([JSON.stringify({format:'thinking-tree/2',title:m.title,mode:m.mode,nodes:m.nodes,files})],{type:'application/json'});const u=URL.createObjectURL(blob);const l=document.createElement('a');l.href=u;l.download=(m.title||'导图')+'.json';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);toast('已导出')}
   if(a==='import')$('#jsonIn').click();
+  if(a==='share')openShare();
+  if(a==='keep')keepShared();
   if(a==='md'){const out=[];const go=(id,d)=>{const n=N(id);out.push('  '.repeat(d)+'- '+n.t);if(n.d.trim())n.d.split('\n').forEach(l=>out.push('  '.repeat(d+1)+'> '+l));kids(id).forEach(c=>go(c.id,d+1))};roots().forEach(r=>go(r.id,0));try{await navigator.clipboard.writeText(out.join('\n'));toast('Markdown 大纲已复制')}catch(err){toast('浏览器不允许复制')}}
   if(a==='seed'&&!await loadSeed())toast('没有找到使用说明');
   if(a==='delmap'){if(st.maps.length<2)return toast('至少保留一张导图');if(await ask(`删除导图“${m.title}”？此操作不能撤销，建议先导出备份。`)){for(const n of Object.values(m.nodes))if(n.m)fdel(n.m.key);st.maps=st.maps.filter(x=>x!==m);st.cur=st.maps[0].id;sel=roots()[0]?.id;undo=[];redo=[];save();render();fit()}}});
@@ -497,11 +509,70 @@ document.addEventListener('keydown',e=>{const tag=document.activeElement.tagName
   else if(k==='ArrowRight'){e.preventDefault();const ks=kids(n.id);if(ks.length){if(!n.o)toggle(n.id,true);select(ks[0].id);ensureVisible(ks[0])}}
   else if(k==='ArrowUp'||k==='ArrowDown'){e.preventDefault();const s=kids(n.p),i=s.findIndex(x=>x.id===n.id)+(k==='ArrowUp'?-1:1);if(s[i]){select(s[i].id);ensureVisible(s[i])}}
   else if(k==='Escape')$('#panel').classList.add('hide')});
-addEventListener('beforeunload',()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}});
+addEventListener('beforeunload',()=>{if(RO)return;try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}});
 addEventListener('resize',applyView);
 
+/* sharing: map is gzipped + AES-GCM encrypted in the browser, stored as ciphertext in the repo.
+   The key lives only in the link's #fragment, which browsers never send to any server. */
+const GH={owner:'RanRuiqian',repo:'RanRuiqian.github.io',dir:'thinking-tree/shared/'},TOKKEY='thinking-tree.gh';
+const b64=u=>{let s='';for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)};
+const unb64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const b64u=u=>b64(u).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const unb64u=s=>unb64(s.replace(/-/g,'+').replace(/_/g,'/')+'==='.slice((s.length+3)%4));
+const pipe=async(u,t)=>new Uint8Array(await new Response(new Blob([u]).stream().pipeThrough(t)).arrayBuffer());
+async function pwKey(pw,salt,use){const base=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:250000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,[use])}
+async function seal(bytes,sh){const iv=crypto.getRandomValues(new Uint8Array(12));let key,salt=new Uint8Array(16);
+  if(sh.pw){salt=crypto.getRandomValues(new Uint8Array(16));key=await pwKey(sh.pw,salt,'encrypt')}else key=await crypto.subtle.importKey('raw',unb64u(sh.k),'AES-GCM',false,['encrypt']);
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},key,bytes));const out=new Uint8Array(4+16+12+ct.length);out.set([84,84,50,sh.pw?1:0]);out.set(salt,4);out.set(iv,20);out.set(ct,32);return out}
+async function unseal(buf,k,pw){const salt=buf.subarray(4,20),iv=buf.subarray(20,32),ct=buf.subarray(32);const key=buf[3]?await pwKey(pw,salt,'decrypt'):await crypto.subtle.importKey('raw',unb64u(k),'AES-GCM',false,['decrypt']);return new Uint8Array(await crypto.subtle.decrypt({name:'AES-GCM',iv},key,ct))}
+async function ghApi(method,id,body){const tok=localStorage.getItem(TOKKEY);const r=await fetch(`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.dir}${id}.bin`+(method==='GET'?'?ref=main':''),{method,cache:'no-store',headers:{Authorization:'Bearer '+tok,Accept:'application/vnd.github+json'},body:body?JSON.stringify(body):undefined});
+  if(method==='GET'&&r.status===404)return null;if(!r.ok){const e=new Error(r.status===401||r.status===403?'token':'net '+r.status);throw e}return r.json()}
+function shareLink(sh){return location.origin+location.pathname+'#s='+sh.id+(sh.pw?'':'.'+sh.k)}
+async function openShare(){const m=M(),B=$('#shareBox'),S=$('#shareM');S.classList.add('on');const close=()=>S.classList.remove('on');
+  const tok=localStorage.getItem(TOKKEY);
+  if(!tok){B.innerHTML=`<h3>第一次分享：连接你的 GitHub</h3><p class="sm">分享时，导图会先在你的浏览器里加密，再把加密后的文件存进你的 GitHub 仓库。为此需要一个只能改这个仓库的令牌，只需要设置一次。</p>
+    <ol><li>打开 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub 新建令牌页面</a>（Fine-grained token）</li><li>Repository access 选 <b>Only select repositories</b> → <b>${GH.repo}</b></li><li>Permissions → Repository permissions → <b>Contents</b> 选 <b>Read and write</b></li><li>生成后复制，粘贴到下面</li></ol>
+    <input type="password" id="shTok" placeholder="github_pat_…" autocomplete="off"><p class="sm">令牌只保存在这个浏览器里，不会出现在分享链接中。</p><div class="row"><button class="sb" id="shNo">取消</button><button class="ib pri" id="shOk">保存并继续</button></div>`;
+    $('#shNo').onclick=close;$('#shOk').onclick=()=>{const v=$('#shTok').value.trim();if(!v)return;localStorage.setItem(TOKKEY,v);openShare()};return}
+  const sh=m.share;
+  B.innerHTML=`<h3>分享“${esc(m.title)}”</h3><p class="sm">拿到链接的人才能打开，而且只能查看。链接里带着解密钥匙；没有链接，就算有人翻到仓库，看到的也只是加密乱码。</p>
+    ${sh?`<div class="link"><input type="text" readonly id="shLink" value="${esc(shareLink(sh))}"><button class="ib pri" id="shCopy">复制</button></div><p class="sm">${sh.pw?'对方打开后还要输入访问密码。':''}你在这张导图里改了内容后，点“更新分享内容”，原来的链接不变，对方刷新就能看到新内容（最多晚几分钟）。</p>`:
+      `<label><input type="checkbox" id="shUsePw"> 另外再加一个访问密码（链接被转发出去也打不开）</label><input type="password" id="shPw" placeholder="访问密码" hidden autocomplete="new-password">`}
+    <div class="row">${sh?'<button class="sb" id="shStop">停止分享</button>':''}<button class="sb" id="shTokReset">更换令牌</button><button class="sb" id="shNo">关闭</button><button class="ib pri" id="shOk">${sh?'更新分享内容':'生成分享链接'}</button></div>`;
+  $('#shNo').onclick=close;$('#shTokReset').onclick=()=>{localStorage.removeItem(TOKKEY);openShare()};
+  if($('#shUsePw'))$('#shUsePw').onchange=e=>$('#shPw').hidden=!e.target.checked;
+  if($('#shCopy'))$('#shCopy').onclick=async()=>{try{await navigator.clipboard.writeText($('#shLink').value);toast('链接已复制')}catch(e){$('#shLink').select()}};
+  if($('#shStop'))$('#shStop').onclick=async()=>{if(!await ask('停止分享后，原来的链接会失效。确定吗？'))return;try{const cur=await ghApi('GET',sh.id);if(cur)await ghApi('DELETE',sh.id,{message:'share: remove',sha:cur.sha,branch:'main'});delete m.share;save();toast('已停止分享');openShare()}catch(e){toast(e.message==='token'?'令牌无效或没有权限，请点“更换令牌”':'网络出错，请重试')}};
+  $('#shOk').onclick=async()=>{const btn=$('#shOk');let next=sh?{...sh}:{id:b64u(crypto.getRandomValues(new Uint8Array(12)))};
+    if(!sh){if($('#shUsePw').checked){const pw=$('#shPw').value;if(pw.length<4)return toast('密码至少 4 位');next.pw=pw}else next.k=b64u(crypto.getRandomValues(new Uint8Array(32)))}
+    btn.disabled=true;btn.textContent='正在加密上传…';
+    try{const files={};for(const n of Object.values(m.nodes))if(n.m){const bl=await fget(n.m.key).catch(()=>null);if(bl)files[n.m.key]=await new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(bl)})}
+      const raw=new TextEncoder().encode(JSON.stringify({format:'thinking-tree/2',title:m.title,mode:m.mode,nodes:m.nodes,files}));
+      const sealed=await seal(await pipe(raw,new CompressionStream('gzip')),next);
+      if(sealed.length>45e6)throw new Error('big');
+      const cur=await ghApi('GET',next.id);await ghApi('PUT',next.id,{message:'share: update',content:b64(sealed),branch:'main',...(cur?{sha:cur.sha}:{})});
+      m.share=next;save();toast(sh?'分享内容已更新':'分享链接已生成');openShare()}
+    catch(e){btn.disabled=false;btn.textContent=sh?'更新分享内容':'生成分享链接';toast(e.message==='token'?'令牌无效或没有权限，请点“更换令牌”':e.message==='big'?'文件太大（超过 45 MB），请删掉一些大文件再分享':'上传失败，请检查网络后重试')}}}
+$('#shareM').addEventListener('click',e=>{if(e.target.id==='shareM')$('#shareM').classList.remove('on')});
+async function fetchShared(id){const urls=[[`https://api.github.com/repos/${GH.owner}/${GH.repo}/contents/${GH.dir}${id}.bin?ref=main`,{Accept:'application/vnd.github.raw'}],[`https://raw.githubusercontent.com/${GH.owner}/${GH.repo}/main/${GH.dir}${id}.bin`,{}],[`shared/${id}.bin`,{}]];
+  for(const [u,h] of urls){try{const r=await fetch(u,{headers:h,cache:'no-store'});if(r.ok)return new Uint8Array(await r.arrayBuffer());if(r.status===404&&u.startsWith('https://api'))return null}catch(e){}}return null}
+async function loadShared(){const [id,k]=location.hash.slice(3).split('.');$('#status').textContent='正在打开分享的导图…';
+  const buf=await fetchShared(id);if(!buf||buf[0]!==84||buf[2]!==50){await ask('这个分享链接已经失效，或者链接不完整。');return false}
+  let plain=null,pw=null;for(let t=0;t<5&&!plain;t++){if(buf[3]){pw=await ask(t?'密码不对，请重新输入访问密码':'这张导图设置了访问密码，请输入','',true);if(pw===null)return false}
+    try{plain=await unseal(buf,k,pw)}catch(e){if(!buf[3]){await ask('链接里的钥匙不对，可能链接没有复制完整。');return false}}}
+  if(!plain)return false;
+  const j=JSON.parse(new TextDecoder().decode(await pipe(plain,new DecompressionStream('gzip'))));
+  for(const [fk,v] of Object.entries(j.files||{}))await fput(fk,await (await fetch(v)).blob());
+  RO=true;document.body.classList.add('ro');$('#tIn').readOnly=$('#dIn').readOnly=true;$('#tEdit').hidden=true;
+  st={maps:[{id:'shared',title:j.title||'分享的导图',mode:j.mode==='free'?'free':'auto',nodes:j.nodes}],cur:'shared'};sel=roots()[0]?.id;
+  document.title=(j.title||'分享的导图')+' · 思路树';render();fit();$('#status').textContent='只读查看';return true}
+function keepShared(){if(!RO)return;let mine={maps:[],cur:null};try{mine=JSON.parse(localStorage.getItem(KEY)||'null')||mine}catch(e){}
+  const m=JSON.parse(JSON.stringify(M()));m.id=uid();delete m.share;mine.maps.push(m);mine.cur=m.id;localStorage.setItem(KEY,JSON.stringify(mine));
+  location.replace(location.pathname)}
+$('#bKeep').onclick=keepShared;
+addEventListener('hashchange',()=>{if(location.hash.startsWith('#s=')||RO)location.reload()});
 async function loadSeed(){try{const r=await fetch('seed.json',{cache:'no-store'});if(!r.ok)throw 0;const j=await r.json();newMap(j.title||'使用说明',fromTree(j.root));return true}catch(e){return false}}
-(async()=>{let ok=false;
+(async()=>{if(location.hash.startsWith('#s=')){if(await loadShared())return;history.replaceState(null,'',location.pathname)}let ok=false;
   try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s&&s.maps&&s.maps.length){st=s;if(!M())st.cur=st.maps[0].id;ok=true}}catch(e){}
   if(!ok){try{const o=JSON.parse(localStorage.getItem(OLDKEY)||'null');if(o&&o.maps&&o.maps.length){const ix=Math.max(0,o.maps.findIndex(m=>m.id===o.cur));st={maps:o.maps.map(m=>({id:m.id,title:m.title,mode:'auto',nodes:fromTree(m.root)})),cur:null};st.cur=st.maps[ix].id;ok=true;save();setTimeout(()=>toast('已把旧版导图迁移到新版本'),300)}}catch(e){}}
   if(ok){sel=roots()[0]?.id;render();fit();$('#status').textContent='已载入上次的内容'}
