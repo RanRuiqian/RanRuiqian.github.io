@@ -40,6 +40,7 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stro
 .node .dd{width:5px;height:5px;border-radius:50%;background:var(--mute);opacity:.7;flex:none}
 .node .tg{flex:none;min-width:24px;height:24px;border-radius:7px;border:1px solid var(--line);background:var(--soft);display:grid;place-items:center;font-size:12px;color:var(--mute);cursor:pointer;padding:0 5px}
 .node .tg:hover{color:var(--ink);border-color:var(--mute)}
+.node.ctx{opacity:.62;border-style:dashed;background:var(--soft)}.node.ctx.root{color:var(--ink);background:var(--soft);border-color:var(--mute)}.node.ctx.root .tg{color:var(--mute);border-color:var(--line)}
 .node.root{background:var(--ink);color:var(--card);border-color:var(--ink)}
 .node.root .tx{font-weight:650;font-size:15.5px}.node.root .tg{background:transparent;color:inherit;border-color:rgba(127,127,127,.5)}
 .node.sel{box-shadow:0 0 0 2px var(--acc),var(--shadow2)}
@@ -111,7 +112,7 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stro
 .tip{color:var(--mute);font-size:12px;line-height:1.75;border-top:1px solid var(--line);padding-top:12px}
 .tip kbd{font:11px var(--ui);background:var(--soft);border:1px solid var(--line);border-radius:4px;padding:0 4px}
 .modal{position:fixed;inset:0;z-index:40;background:rgba(10,10,8,.42);display:none;align-items:center;justify-content:center;padding:16px}
-.modal.on{display:flex}#modal{z-index:50}
+.modal.on{display:flex}.modal input[type=checkbox]{width:auto;margin:0;padding:0;flex:none}#modal{z-index:50}
 .modal .box{position:relative;width:min(440px,100%);padding:18px;border-radius:14px}
 .modal p{margin:0 0 12px;font-size:15px}
 .modal input{width:100%;border:1px solid var(--line);border-radius:9px;background:var(--soft);padding:9px 10px;font-size:16px;margin-bottom:14px}
@@ -134,6 +135,8 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stro
 #drophint.on{display:flex}
 #roBar{left:50%;top:74px;transform:translateX(-50%);display:none;align-items:center;gap:10px;padding:6px 6px 6px 14px;font-size:13px;max-width:calc(100% - 32px)}
 body.shared #roBar{display:flex}.cobtn{display:none}body.co .cobtn{display:inline-flex}body.co #bFile{display:none}
+#shareM .box{max-height:90vh;overflow:auto}#shareM .shl{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}#shareM .shi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--soft)}#shareM .shi .t{display:flex;align-items:baseline;gap:8px;margin-bottom:8px}#shareM .shi .t span{color:var(--mute);font-size:12px}#shareM .shi .link input{background:var(--card)}#shareM .shi .row{justify-content:flex-start}
+#shareM .tree{max-height:42vh;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:6px 4px;margin-bottom:12px;background:var(--soft)}#shareM .tr{display:flex!important;align-items:center;gap:8px;margin:0!important;padding:4px 8px;border-radius:6px;font-size:13.5px;cursor:pointer}#shareM .tr:hover{background:var(--card)}#shareM .tr span{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}#shareM .tr em,#shareM .tr i{font-style:normal;font-size:11px;color:var(--mute)}#shareM .tb{display:flex;gap:6px;margin-bottom:6px}
 #shareM .co{border-top:1px solid var(--line);padding-top:12px;margin-top:4px}#shareM .co b{font-size:14px}
 #hist{left:16px;top:74px;bottom:70px;width:330px;display:flex;flex-direction:column;overflow:hidden;z-index:11}#hist.hide{display:none}
 #hist .hd{display:flex;align-items:center;gap:8px;padding:10px 10px 10px 16px;border-bottom:1px solid var(--line)}#hist .hd span{flex:1;color:var(--mute);font-size:12px}
@@ -363,7 +366,7 @@ function render(){const m=M();if(!m)return;if(m.mode==='auto')autoLayout();else 
   svg.innerHTML=es+'<path class="tmp" id="tmp" d=""/>';
   world.querySelectorAll('.node').forEach(e=>e.remove());
   let hs='';for(const n of vis){const s=size(n),col=branchColor(n.id),ks=kids(n.id).length,isRoot=!n.p;
-    const cls=['node',isRoot?'root':'',n.id===sel?'sel':'',matches(n)?'match':''].join(' ');
+    const cls=['node',n.c?'ctx':'',isRoot?'root':'',n.id===sel?'sel':'',matches(n)?'match':''].join(' ');
     hs+=`<div class="${cls}" data-id="${n.id}" style="left:${n.x}px;top:${n.y}px;width:${s.w}px;height:${s.h}px;${col?`--c:${col}`:''}" title="${esc(n.t)}"><span class="port in" data-port="in"></span><span class="port out" data-port="out"></span><div class="row">${isRoot?'':'<span class="sw"></span>'}<span class="tx">${esc(n.t)}</span>${n.d.trim()?'<span class="dd"></span>':''}${ks?`<button class="tg" data-t="${n.id}" title="${n.o?'收起':'展开'}">${n.o?'−':ks}</button>`:''}</div>${pvHTML(n)}</div>`}
   world.insertAdjacentHTML('beforeend',hs);
   applyView();
@@ -382,11 +385,11 @@ function md2html(s){if(!s.trim())return '<p class="empty">还没有详细内容�
     else if(!l)cl();else{cl();h+=`<p>${inl(l)}</p>`}}cl();return h}
 function panel(){const n=N(sel),P=$('#panel');if(!n){P.classList.add('hide');return}
   $('#crumb').textContent=anc(n.id).reverse().map(a=>a.t).join(' / ')||'顶层节点';
-  if(document.activeElement!==$('#tIn'))$('#tIn').value=n.t;
+  if(document.activeElement!==$('#tIn'))$('#tIn').value=n.t;$('#tIn').readOnly=RO||!!n.c;$('#dIn').readOnly=RO||!!n.c;
   if(document.activeElement!==$('#dIn'))$('#dIn').value=n.d;
-  $('#dView').innerHTML=md2html(n.d);$('#dView').hidden=editMode;$('#dIn').hidden=!editMode;
+  $('#dView').innerHTML=n.c?'<p class="empty">这是结构参考节点：分享者只开放了它下面的部分内容，这个节点的详细内容不对你开放，也不能修改。</p>':md2html(n.d);$('#dView').hidden=editMode;$('#dIn').hidden=!editMode;
   $('#tView').classList.toggle('on',!editMode);$('#tEdit').classList.toggle('on',editMode);
-  $('#meta').innerHTML=`<span>第${depth(n.id)+1}层</span><span>下属 ${subtree(n.id).length-1} 个节点</span>${n.m?`<span>${esc(extOf(n.m.name))} 文件</span>`:''}${(()=>{if(typeof lastEditOf!=='function'||!clog.length)return '';const r=lastEditOf(n.id);return r?`<span style="border-color:${colorOf(r.a.cid)}">最后修改：${esc(r.a.n)} · ${rel(r.ts)}</span>`:''})()}`;
+  $('#meta').innerHTML=`<span>第${depth(n.id)+1}层</span><span>下属 ${subtree(n.id).length-1} 个节点</span>${(()=>{const w=sharedWith(n.id);return w.length?`<span>已分享给：${esc(w.join('、'))}</span>`:''})()}${n.m?`<span>${esc(extOf(n.m.name))} 文件</span>`:''}${(()=>{if(typeof lastEditOf!=='function'||!clog.length)return '';const r=lastEditOf(n.id);return r?`<span style="border-color:${colorOf(r.a.cid)}">最后修改：${esc(r.a.n)} · ${rel(r.ts)}</span>`:''})()}`;
   const mb=$('#mediaBox');if(n.m){mb.hidden=false;const im=n.m.thumb?`<div class="pvbig" data-open="${n.id}"><img src="${n.m.thumb}" alt=""></div>`:'';
     mb.innerHTML=`${im}<div class="acts"><button class="sb" data-act="open">打开查看</button><button class="sb" data-act="replace">替换文件</button><button class="sb" data-act="remove">移除文件</button></div>`}else{mb.hidden=true;mb.innerHTML=''}}
 
@@ -399,14 +402,14 @@ function addNode(p,props={}){const id=uid(),parent=N(p);const n={id,t:'新节点
 function addChild(){if(RO)return;const s=N(sel);if(!s)return;snap();const n=addNode(s.id);sel=n.id;save();render();ensureVisible(n);focusTitle(true)}
 function addSib(){if(RO)return;const s=N(sel);if(!s)return;snap();const n=addNode(s.p);for(const k of kids(s.p))if(k.k>s.k&&k.id!==n.id)k.k++;n.k=s.k+1;if(M().mode==='free'){n.x=s.x;n.y=s.y+size(s).h+VG}sel=n.id;save();render();ensureVisible(n);focusTitle(true)}
 function focusTitle(fresh){dirty=!!fresh;$('#panel').classList.remove('hide');const i=$('#tIn');i.focus();i.select();setTimeout(()=>{if(document.activeElement!==i){i.focus();i.select()}},0)}
-async function del(){if(RO)return;const s=N(sel);if(!s)return;if(!s.p&&roots().length<2&&Object.keys(M().nodes).length>1&&false)return;const all=subtree(s.id);
+async function del(){if(RO)return;const s=N(sel);if(!s)return;if(s.c)return toast('这是结构参考节点，不能删除');if(!s.p&&roots().length<2&&Object.keys(M().nodes).length>1&&false)return;const all=subtree(s.id);
   if(Object.keys(M().nodes).length===all.length)return toast('导图里至少要保留一个节点');
   if(all.length>1&&!await ask(`删除“${s.t}”及其下属 ${all.length-1} 个节点？可以撤销。`))return;
   snap();const sib=kids(s.p),i=sib.findIndex(x=>x.id===s.id);for(const n of all)delete M().nodes[n.id];
   const rest=kids(s.p);sel=(rest[i]||rest[i-1]||N(s.p)||roots()[0])?.id;save();render()}
 function toggle(id,v){const n=N(id);if(!n||!kids(id).length)return;n.o=v===undefined?!n.o:v;if(!n.o&&M().mode==='free')for(const d of subtree(id).slice(1))d.pl=false;save();anim();render()}
 function level(k){for(const n of Object.values(M().nodes))n.o=depth(n.id)<k;if(M().mode==='free')for(const n of Object.values(M().nodes))if(!visible(n.id))n.pl=false;save();anim();render()}
-function reparent(id,np){const n=N(id);np=np||null;if(!n||id===np)return false;if(np&&isDesc(np,id)){toast('不能连到自己的下级节点');return false}if((n.p||null)===np)return false;
+function reparent(id,np){const n=N(id);np=np||null;if(!n||id===np)return false;if(n.c){toast('结构参考节点不能移动');return false}if(np&&isDesc(np,id)){toast('不能连到自己的下级节点');return false}if((n.p||null)===np)return false;
   snap();materialize();n.p=np;n.k=nextK(np);if(np)N(np).o=true;return true}
 function anim(){world.classList.add('anim');setTimeout(()=>world.classList.remove('anim'),400)}
 function doLayout(){snap();M().mode='auto';anim();render();setTimeout(fit,380);toast('已按树形排版')}
@@ -487,8 +490,8 @@ document.querySelectorAll('.seg [data-l]').forEach(b=>b.onclick=()=>{level(+b.da
 $('#bIn').onclick=()=>zoomAt(1.2,innerWidth/2,innerHeight/2);$('#bOut').onclick=()=>zoomAt(1/1.2,innerWidth/2,innerHeight/2);$('#bFit').onclick=fit;
 $('#close').onclick=()=>$('#panel').classList.add('hide');
 $('#tView').onclick=()=>{editMode=false;panel()};$('#tEdit').onclick=()=>{editMode=true;panel();$('#dIn').focus()};
-$('#tIn').addEventListener('input',e=>{const n=N(sel);if(!n)return;if(!dirty){snap();dirty=true}n.t=e.target.value;save();render()});
-$('#dIn').addEventListener('input',e=>{const n=N(sel);if(!n)return;if(!dirty){snap();dirty=true}n.d=e.target.value;save();render()});
+$('#tIn').addEventListener('input',e=>{const n=N(sel);if(!n||n.c)return;if(!dirty){snap();dirty=true}n.t=e.target.value;save();render()});
+$('#dIn').addEventListener('input',e=>{const n=N(sel);if(!n||n.c)return;if(!dirty){snap();dirty=true}n.d=e.target.value;save();render()});
 ['tIn','dIn'].forEach(i=>{$('#'+i).addEventListener('blur',()=>dirty=false);$('#'+i).addEventListener('keydown',e=>{e.stopPropagation();if(i==='tIn'&&(e.key==='Enter'||e.key==='Escape')){e.preventDefault();vp.focus()}})});
 $('#bMenu').onclick=e=>{e.stopPropagation();$('#menu').classList.toggle('open')};
 document.addEventListener('click',e=>{if(!e.target.closest('#menu'))$('#menu').classList.remove('open')});
@@ -553,11 +556,11 @@ async function sealRec(ck,o){return b64(await encWith(ck,await pipe(enc(o),new C
 async function openRec(ck,s){return dec(await pipe(await decWith(ck,unb64(s)),new DecompressionStream('gzip')))}
 
 /* edit records: diff of the shared fields (title, detail, parent, order, file). Layout stays per-viewer. */
-const FIELDS=['t','d','p','k','m'];
-function proj(nodes){const o={};for(const n of Object.values(nodes))o[n.id]={t:n.t,d:n.d,p:n.p||null,k:n.k,m:n.m?JSON.stringify(n.m):null};return o}
-function cloneShared(nodes){const o={};for(const n of Object.values(nodes))o[n.id]={id:n.id,t:n.t,d:n.d,p:n.p||null,k:n.k,m:n.m?JSON.parse(JSON.stringify(n.m)):null};return o}
+const FIELDS=['t','d','p','k','m','c'];
+function proj(nodes){const o={};for(const n of Object.values(nodes))o[n.id]={t:n.t,d:n.d,p:n.p||null,k:n.k,m:n.m?JSON.stringify(n.m):null,c:n.c?1:0};return o}
+function cloneShared(nodes){const o={};for(const n of Object.values(nodes))o[n.id]={id:n.id,t:n.t,d:n.d,p:n.p||null,k:n.k,m:n.m?JSON.parse(JSON.stringify(n.m)):null,c:n.c?1:0};return o}
 function diffOps(a,b){const ops=[],desc=[];const T=id=>((b[id]||a[id]||{}).t||'未命名');
-  for(const id in b)if(!a[id]){const n=b[id];ops.push({op:'add',n:{id,t:n.t,d:n.d,p:n.p,k:n.k,m:n.m?JSON.parse(n.m):null}});if(!(n.p&&!a[n.p]&&b[n.p]))desc.push({id,x:`新增了「${n.t}」`+(n.p?`（在「${T(n.p)}」下）`:'')})}
+  for(const id in b)if(!a[id]){const n=b[id];ops.push({op:'add',n:{id,t:n.t,d:n.d,p:n.p,k:n.k,m:n.m?JSON.parse(n.m):null,c:n.c}});if(!(n.p&&!a[n.p]&&b[n.p]))desc.push({id,x:`新增了「${n.t}」`+(n.p?`（在「${T(n.p)}」下）`:'')})}
   const gone=Object.keys(a).filter(id=>!b[id]);const gs=new Set(gone);
   for(const id of gone){ops.push({op:'del',id});if(!(a[id].p&&gs.has(a[id].p))){let c=0;const cnt=p=>{for(const x of gone)if(a[x].p===p){c++;cnt(x)}};cnt(id);desc.push({id:a[id].p||null,x:`删除了「${a[id].t}」`+(c?`及下属 ${c} 个节点`:'')})}}
   for(const id in b){const x=a[id],y=b[id];if(!x)continue;for(const f of FIELDS)if(x[f]!==y[f]){ops.push({op:'set',id,f,v:f==='m'?(y.m?JSON.parse(y.m):null):y[f]});
@@ -601,8 +604,16 @@ async function fetchRaw(name){const urls=[[`https://api.github.com/repos/${GH.ow
   for(const [u,h] of urls){try{const r=await fetch(u,{headers:h,cache:'no-store'});if(r.ok)return new Uint8Array(await r.arrayBuffer());if(r.status===404&&u.startsWith('https://api'))return null}catch(e){}}return null}
 async function fetchFileRemote(key){const sh=COL||(M()&&M().share);if(!sh||!sh.ck)return null;const buf=await fetchRaw(sh.id+'-'+key);if(!buf)return null;const n=Object.values(M().nodes).find(x=>x.m&&x.m.key===key);const bl=new Blob([await decWith(sh.ck,buf)],{type:n?.m?.type||''});await fput(key,bl);return bl}
 async function blobDataURL(bl){return new Promise(r=>{const fr=new FileReader();fr.onload=()=>r(fr.result);fr.readAsDataURL(bl)})}
-async function putSnapshot(m,sh){const files={};for(const n of Object.values(m.nodes))if(n.m){const bl=await fget(n.m.key).catch(()=>null);if(bl)files[n.m.key]=await blobDataURL(bl)}
-  const payload={format:'thinking-tree/2',title:m.title,mode:m.mode,nodes:m.nodes,files,...(sh.ck?{collab:{url:sh.url,ck:sh.ck,ws:sh.ws}}:{})};
+/* per-recipient scope: a share holds only the nodes ticked for it (plus their ancestors as title-only context) */
+function sharesOf(m){if(m.share&&!m.shares){m.shares=[{...m.share,label:'分享 1',sel:null}];delete m.share}return m.shares||(m.shares=[])}
+function scopeOf(m,sh){const all=m.nodes,sel=sh.sel?new Set(sh.sel):null,known=new Set(sh.known||[]),memo={};
+  const inc=id=>{if(id in memo)return memo[id];const n=all[id];let r=false;if(n){if(!sel)r=true;else if(sel.has(id))r=true;else if(!known.has(id)&&n.p)r=inc(n.p)}return memo[id]=r};
+  const ins=new Set(Object.keys(all).filter(inc)),ctx=new Set();for(const id of ins){let p=all[id].p,g=0;while(p&&all[p]&&!ins.has(p)&&g++<500){ctx.add(p);p=all[p].p}}
+  const nodes={};for(const id of ins)nodes[id]={...all[id],c:0};for(const id of ctx)nodes[id]={...all[id],d:'',m:null,c:1};
+  for(const n of Object.values(nodes))if(n.p&&!nodes[n.p])n.p=null;return {nodes,ins,ctx}}
+function sharedWith(id){const m=M();if(SHARED||!m)return [];return sharesOf(m).filter(sh=>scopeOf(m,sh).ins.has(id)).map(sh=>sh.label)}
+async function putSnapshot(m,sh){const {nodes}=scopeOf(m,sh);const files={};for(const n of Object.values(nodes))if(n.m){const bl=await fget(n.m.key).catch(()=>null);if(bl)files[n.m.key]=await blobDataURL(bl)}
+  const payload={format:'thinking-tree/2',title:m.title,mode:m.mode,nodes,files,...(sh.ck?{collab:{url:sh.url,ck:sh.ck,ws:sh.ws}}:{})};
   const sealed=await seal(await pipe(enc(payload),new CompressionStream('gzip')),sh);if(sealed.length>45e6)throw new Error('big');
   const cur=await ghApi('GET',sh.id);await ghApi('PUT',sh.id,{message:'share: update',content:b64(sealed),branch:'main',...(cur?{sha:cur.sha}:{})});sh.fk=Object.keys(files)}
 async function openSnapshot(id,k,pwAsk){const buf=await fetchRaw(id);if(!buf||buf[0]!==84||buf[2]!==50)return {err:'gone'};let plain=null,pw=null;
@@ -610,48 +621,68 @@ async function openSnapshot(id,k,pwAsk){const buf=await fetchRaw(id);if(!buf||bu
     try{plain=await unseal(buf,k,pw)}catch(e){if(!buf[3]||typeof pwAsk==='string')return {err:'key'}}}
   if(!plain)return {err:'cancel'};return {j:dec(await pipe(plain,new DecompressionStream('gzip')))}}
 async function sharedState(sh){const {j,err}=await openSnapshot(sh.id,sh.k,sh.pw);if(err)throw new Error(err);const nodes=cloneShared(j.nodes);const col={...j.collab,id:sh.id};const {recs}=await readChanges(col,0);for(const r of recs)applyOps(nodes,r.ops);return {j,nodes,recs}}
-async function ownerSync(m,sh){const {nodes}=await sharedState(sh);const {ops,desc}=diffOps(proj(nodes),proj(m.nodes));
+async function ownerSync(m,sh){const {nodes:S}=await sharedState(sh);const {nodes:L}=scopeOf(m,sh);const {ops,desc}=diffOps(proj(S),proj(L));
   const tok=localStorage.getItem(TOKKEY);sh.fk=sh.fk||[];
-  for(const n of Object.values(m.nodes))if(n.m&&!sh.fk.includes(n.m.key)&&tok){const bl=await fget(n.m.key).catch(()=>null);if(!bl)continue;const name=sh.id+'-'+n.m.key;const data=await encWith(sh.ck,new Uint8Array(await bl.arrayBuffer()));if(data.length>45e6)throw new Error('big');const cur=await ghApi('GET',name);await ghApi('PUT',name,{message:'share: file',content:b64(data),branch:'main',...(cur?{sha:cur.sha}:{})});sh.fk.push(n.m.key)}
+  for(const n of Object.values(L))if(n.m&&!sh.fk.includes(n.m.key)&&tok){const bl=await fget(n.m.key).catch(()=>null);if(!bl)continue;const name=sh.id+'-'+n.m.key;const data=await encWith(sh.ck,new Uint8Array(await bl.arrayBuffer()));if(data.length>45e6)throw new Error('big');const cur=await ghApi('GET',name);await ghApi('PUT',name,{message:'share: file',content:b64(data),branch:'main',...(cur?{sha:cur.sha}:{})});sh.fk.push(n.m.key)}
   if(!ops.length)return 0;const who=me().name||await askName();await postChange({...sh},{id:uid(),a:{cid:me().cid,n:who},ts:Date.now(),ops,desc});return desc.length}
-async function ownerMerge(m,sh){const {nodes}=await sharedState(sh);snap();const free=m.mode==='free';
-  for(const id of Object.keys(m.nodes))if(!nodes[id])delete m.nodes[id];
-  for(const n of Object.values(nodes)){const l=m.nodes[n.id];if(l)Object.assign(l,{t:n.t,d:n.d,p:n.p,k:n.k,m:n.m});else m.nodes[n.id]={...n,o:true,x:0,y:0,...(free?{pl:false}:{})}}
-  if(!N(sel))sel=roots()[0]?.id;save();render()}
+async function ownerMerge(m,sh){const {nodes:S}=await sharedState(sh);const {ins}=scopeOf(m,sh);snap();const free=m.mode==='free';let kept=0;
+  for(const id of ins)if(!S[id]&&m.nodes[id]){if(kids(id).some(k=>!ins.has(k.id))){kept++;continue}delete m.nodes[id]}
+  if(sh.sel){const sel=new Set(sh.sel),known=new Set(sh.known||[]);for(const n of Object.values(S))if(!n.c&&!m.nodes[n.id]){sel.add(n.id);known.add(n.id)}sh.sel=[...sel];sh.known=[...known]}
+  for(const n of Object.values(S)){if(n.c)continue;const l=m.nodes[n.id];if(l)Object.assign(l,{t:n.t,d:n.d,p:n.p,k:n.k,m:n.m});else m.nodes[n.id]={id:n.id,t:n.t,d:n.d,p:n.p,k:n.k,m:n.m,o:true,x:0,y:0,...(free?{pl:false}:{})}}
+  for(const n of Object.values(m.nodes))if(n.p&&!m.nodes[n.p])n.p=null;
+  if(!N(sel))sel=roots()[0]?.id;save();render();return kept}
 async function collabInit(url,sh){sh.url=url;sh.ck=b64u(crypto.getRandomValues(new Uint8Array(32)));sh.ws=b64u(crypto.getRandomValues(new Uint8Array(24)));
   const r=await fetch(`${url}/s/${sh.id}/init`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({wh:await sha256hex(sh.ws)})});if(!r.ok)throw new Error('collab')}
 const normUrl=u=>(u||'').trim().replace(/\/+$/,'');
 async function testCollab(u){try{const r=await fetch(u+'/',{cache:'no-store'});return r.ok&&(await r.json()).service==='thinking-tree-collab'}catch(e){return false}}
 function shareLink(sh){return location.origin+location.pathname+'#s='+sh.id+(sh.pw?'':'.'+sh.k)}
 const errMsg=e=>e.message==='token'?'GitHub 令牌无效或没有权限，请点“更换令牌”':e.message==='big'?'文件太大（超过 45 MB），请删掉一些大文件再分享':e.message.startsWith('collab')||e.message.startsWith('post')?'连不上协作服务器，请检查地址':'操作失败，请检查网络后重试';
+function scopeTree(m,checked){const row=(n,d)=>`<label class="tr" style="padding-left:${8+d*18}px"><input type="checkbox" data-id="${n.id}"${checked.has(n.id)?' checked':''}><span>${esc(n.t)}</span>${n.m?'<em>文件</em>':''}${kids(n.id).length?`<i>${subtree(n.id).length-1}</i>`:''}</label>`+kids(n.id).map(k=>row(k,d+1)).join('');return roots().map(r=>row(r,0)).join('')}
+function wireTree(box){box.addEventListener('change',e=>{const c=e.target.closest('input[data-id]');if(!c)return;for(const n of subtree(c.dataset.id).slice(1)){const x=box.querySelector(`input[data-id="${n.id}"]`);if(x)x.checked=c.checked}})}
+const pickSel=box=>[...box.querySelectorAll('input[data-id]:checked')].map(x=>x.dataset.id);
 async function openShare(){const m=M(),B=$('#shareBox'),S=$('#shareM');S.classList.add('on');const close=()=>S.classList.remove('on');
   const tok=localStorage.getItem(TOKKEY);
-  if(!tok){B.innerHTML=`<h3>第一次分享：连接你的 GitHub</h3><p class="sm">分享时，导图会先在你的浏览器里加密，再把加密后的文件存进你的 GitHub 仓库。为此需要一个只能改这个仓库的令牌，只需要设置一次。</p>
+  if(!tok){B.innerHTML=`<h3>第一次分享：连接你的 GitHub</h3><p class="sm">分享时，内容会先在你的浏览器里加密，再把加密后的文件存进你的 GitHub 仓库。为此需要一个只能改这个仓库的令牌，只需要设置一次。</p>
     <ol><li>打开 <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">GitHub 新建令牌页面</a>（Fine-grained token）</li><li>Repository access 选 <b>Only select repositories</b> → <b>${GH.repo}</b></li><li>Permissions → Add permissions → <b>Contents</b>，设为 <b>Read and write</b></li><li>生成后复制，粘贴到下面</li></ol>
     <input type="password" id="shTok" placeholder="github_pat_…" autocomplete="off"><p class="sm">令牌只保存在这个浏览器里，不会出现在分享链接中。</p><div class="row"><button class="sb" id="shNo">取消</button><button class="ib pri" id="shOk">保存并继续</button></div>`;
     $('#shNo').onclick=close;$('#shOk').onclick=()=>{const v=$('#shTok').value.trim();if(!v)return;localStorage.setItem(TOKKEY,v);openShare()};return}
-  const sh=m.share,cu=localStorage.getItem(CO_KEY)||'';
-  const coField=`<div class="co"><b>多人一起改（可选）</b><p class="sm">填上你部署好的协作服务器地址后，拿到链接的人可以直接修改，每个人改了什么都会署名记录，所有人都看得到。<a href="https://github.com/${GH.owner}/${GH.repo}/blob/main/thinking-tree/collab-worker.js" target="_blank" rel="noopener">服务器代码</a></p><input type="text" id="shCo" placeholder="https://thinking-tree-collab.xxx.workers.dev" value="${esc(cu)}"></div>`;
-  B.innerHTML=`<h3>分享“${esc(m.title)}”</h3><p class="sm">拿到链接的人才能打开。链接里带着解密钥匙；没有链接，就算有人翻到仓库，看到的也只是加密乱码。</p>
-    ${sh?`<div class="link"><input type="text" readonly id="shLink" value="${esc(shareLink(sh))}"><button class="ib pri" id="shCopy">复制</button></div>
-      <p class="sm">${sh.pw?'对方打开后还要输入访问密码。':''}${sh.ck?'<b>多人协作已开启</b>：大家在链接里的修改会自动保存并署名。你在自己这张导图里改了内容，点“推送我的修改”；想把大家的修改拿回来，点“拉取大家的修改”。':'现在对方只能查看。你改了内容后点“更新分享内容”，链接不变。'}</p>${sh.ck?'':coField}`:
-      `<label><input type="checkbox" id="shUsePw"> 另外再加一个访问密码（链接被转发出去也打不开）</label><input type="password" id="shPw" placeholder="访问密码" hidden autocomplete="new-password">${coField}`}
-    <div class="row">${sh?'<button class="sb" id="shStop">停止分享</button>':''}<button class="sb" id="shTokReset">更换令牌</button>${sh&&sh.ck?'<button class="sb" id="shPull">拉取大家的修改</button>':''}<button class="sb" id="shNo">关闭</button><button class="ib pri" id="shOk">${sh?(sh.ck?'推送我的修改':'更新分享内容'):'生成分享链接'}</button></div>`;
-  $('#shNo').onclick=close;$('#shTokReset').onclick=()=>{localStorage.removeItem(TOKKEY);openShare()};
+  const list=sharesOf(m);
+  B.innerHTML=`<h3>分享“${esc(m.title)}”</h3><p class="sm">每个分享是一条独立的链接，只包含你勾选的内容，各自加密、各自记录修改。给不同的人建不同的分享，他们打开的是同一个界面，但只能看到、只能改到你给他的那部分。</p>
+    <div class="shl">${list.map((sh,i)=>{const sc=scopeOf(m,sh);return `<div class="shi" data-i="${i}"><div class="t"><b>${esc(sh.label||'分享 '+(i+1))}</b><span>${sh.sel?`${sc.ins.size} 个节点`:'整张导图'} · ${sh.ck?'可多人修改':'只读'}${sh.pw?' · 有密码':''}</span></div>
+      <div class="link"><input type="text" readonly value="${esc(shareLink(sh))}"><button class="ib pri" data-a="copy">复制</button></div>
+      <div class="row"><button class="sb" data-a="scope">修改范围</button>${sh.ck?'<button class="sb" data-a="pull">拉取修改</button>':''}<button class="sb" data-a="push">${sh.ck?'推送我的修改':'更新内容'}</button><button class="sb" data-a="stop">停止分享</button></div></div>`}).join('')||'<p class="sm none">还没有分享。点下面的“新建分享”，勾选要给对方的内容。</p>'}</div>
+    <div class="row"><button class="sb" id="shTokReset">更换令牌</button><button class="sb" id="shNo">关闭</button><button class="ib pri" id="shNew">新建分享</button></div>`;
+  $('#shNo').onclick=close;$('#shTokReset').onclick=()=>{localStorage.removeItem(TOKKEY);openShare()};$('#shNew').onclick=()=>editShare(m,null);
+  B.querySelector('.shl').onclick=async e=>{const b=e.target.closest('[data-a]');if(!b)return;const card=b.closest('.shi'),sh=list[+card.dataset.i],a=b.dataset.a;
+    if(a==='copy'){const inp=card.querySelector('input');try{await navigator.clipboard.writeText(inp.value);toast('链接已复制')}catch(err){inp.select()}return}
+    if(a==='scope')return editShare(m,sh);
+    if(a==='stop'){if(!await ask(`停止“${sh.label}”这个分享？链接会失效，修改记录也会删除。`))return;try{const cur=await ghApi('GET',sh.id);if(cur)await ghApi('DELETE',sh.id,{message:'share: remove',sha:cur.sha,branch:'main'});
+        if(sh.ck)await fetch(`${sh.url}/s/${sh.id}/delete`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({w:sh.ws})}).catch(()=>{});m.shares=list.filter(x=>x!==sh);save();toast('已停止分享');openShare()}catch(err){toast(errMsg(err))}return}
+    if(a==='pull'){if(!await ask(`把“${sh.label}”里别人的修改合并到你的导图？只会改动这个分享范围内的节点，可以撤销。`))return;try{const kept=await ownerMerge(m,sh);toast(kept?`已合并；有 ${kept} 个节点下面还有没分享的内容，所以保留了没删`:'已合并大家的修改');openShare()}catch(err){toast(errMsg(err))}return}
+    if(a==='push'){b.disabled=true;b.textContent='处理中…';try{if(sh.ck){const n=await ownerSync(m,sh);toast(n?'已推送你的修改':'没有新的修改需要推送')}else{await putSnapshot(m,sh);toast('分享内容已更新')}save();openShare()}catch(err){toast(errMsg(err));openShare()}}}}
+async function editShare(m,sh){const B=$('#shareBox'),isNew=!sh,cu=localStorage.getItem(CO_KEY)||'';
+  const checked=new Set(sh?scopeOf(m,sh).ins:(N(sel)&&N(sel).p?subtree(sel).map(n=>n.id):[]));
+  B.innerHTML=`<h3>${isNew?'新建分享':'修改“'+esc(sh.label)+'”的范围'}</h3>
+    <input type="text" id="shLabel" placeholder="分享给谁（例如：周天成）——只有你看得到这个备注" value="${esc(sh?sh.label:'')}">
+    <p class="sm">勾选对方能看到、能编辑的内容。勾一个节点会连带勾上它下面的全部节点，之后你在它下面新加的节点也会自动分享。没勾的上级节点只给对方显示标题，用来看清层级，内容不给看、也不能改。</p>
+    <div class="tb"><button class="sb" data-x="all">全选</button><button class="sb" data-x="none">全不选</button></div><div class="tree" id="shTree">${scopeTree(m,checked)}</div>
+    ${isNew?`<label><input type="checkbox" id="shUsePw"> 另外再加一个访问密码（链接被转发出去也打不开）</label><input type="password" id="shPw" placeholder="访问密码" hidden autocomplete="new-password">`:''}
+    ${!sh||!sh.ck?`<div class="co"><b>允许对方修改（可选）</b><p class="sm">填上协作服务器地址后，对方可以直接改他能看到的内容，每次修改都会署名记录。不填就是只读。</p><input type="text" id="shCo" placeholder="https://thinking-tree-collab.xxx.workers.dev" value="${esc(cu)}"></div>`:''}
+    ${sh?'<p class="sm">注意：对方以前已经看到过的内容，取消勾选后不会从他那里消失的历史里抹掉，只是之后的版本里不再出现。</p>':''}
+    <div class="row"><button class="sb" id="shBack">返回</button><button class="ib pri" id="shOk">${isNew?'生成分享链接':'保存并更新'}</button></div>`;
+  const tree=$('#shTree');wireTree(tree);B.querySelector('.tb').onclick=e=>{const x=e.target.closest('[data-x]');if(x)tree.querySelectorAll('input').forEach(c=>c.checked=x.dataset.x==='all')};
   if($('#shUsePw'))$('#shUsePw').onchange=e=>$('#shPw').hidden=!e.target.checked;
-  if($('#shCopy'))$('#shCopy').onclick=async()=>{try{await navigator.clipboard.writeText($('#shLink').value);toast('链接已复制')}catch(e){$('#shLink').select()}};
-  if($('#shPull'))$('#shPull').onclick=async()=>{if(!await ask('用协作版的最新内容覆盖你本地这张导图？你本地还没推送的修改会被替换（可以撤销）。'))return;try{await ownerMerge(m,sh);toast('已拉取大家的修改');close()}catch(e){toast(errMsg(e))}};
-  if($('#shStop'))$('#shStop').onclick=async()=>{if(!await ask('停止分享后，原来的链接会失效，修改记录也会删除。确定吗？'))return;try{const cur=await ghApi('GET',sh.id);if(cur)await ghApi('DELETE',sh.id,{message:'share: remove',sha:cur.sha,branch:'main'});
-      if(sh.ck)await fetch(`${sh.url}/s/${sh.id}/delete`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({w:sh.ws})}).catch(()=>{});delete m.share;save();toast('已停止分享');openShare()}catch(e){toast(errMsg(e))}};
-  $('#shOk').onclick=async()=>{const btn=$('#shOk'),label=btn.textContent;const co=$('#shCo')?normUrl($('#shCo').value):'';
-    if(co&&!/^(https:\/\/|http:\/\/localhost)/.test(co))return toast('协作服务器地址要以 https:// 开头');
-    let next=sh?JSON.parse(JSON.stringify(sh)):{id:b64u(crypto.getRandomValues(new Uint8Array(12)))};
-    if(!sh){if($('#shUsePw').checked){const pw=$('#shPw').value;if(pw.length<4)return toast('密码至少 4 位');next.pw=pw}else next.k=b64u(crypto.getRandomValues(new Uint8Array(32)))}
+  $('#shBack').onclick=openShare;
+  $('#shOk').onclick=async()=>{const btn=$('#shOk'),label=btn.textContent;const ids=pickSel(tree);if(!ids.length)return toast('至少勾选一个节点');
+    const co=$('#shCo')?normUrl($('#shCo').value):'';if(co&&!/^(https:\/\/|http:\/\/localhost)/.test(co))return toast('协作服务器地址要以 https:// 开头');
+    const name=$('#shLabel').value.trim()||('分享 '+(sharesOf(m).length+(isNew?1:0)));
+    const next=sh?JSON.parse(JSON.stringify(sh)):{id:b64u(crypto.getRandomValues(new Uint8Array(12)))};
+    if(isNew){if($('#shUsePw').checked){const pw=$('#shPw').value;if(pw.length<4)return toast('密码至少 4 位');next.pw=pw}else next.k=b64u(crypto.getRandomValues(new Uint8Array(32)))}
+    next.label=name;next.sel=ids.length===Object.keys(m.nodes).length?null:ids;next.known=Object.keys(m.nodes);
     btn.disabled=true;btn.textContent='处理中…';
     try{if(co){if(!await testCollab(co))throw new Error('collab');localStorage.setItem(CO_KEY,co)}
-      if(next.ck){const n=await ownerSync(m,next);m.share=next;save();toast(n?'已推送你的修改':'没有新的修改需要推送')}
-      else{if(co)await collabInit(co,next);await putSnapshot(m,next);m.share=next;save();toast(sh?'分享内容已更新':'分享链接已生成')}
-      openShare()}
+      if(next.ck)await ownerSync(m,next);else{if(co)await collabInit(co,next);await putSnapshot(m,next)}
+      const list=sharesOf(m);if(sh)list[list.indexOf(sh)]=next;else list.push(next);save();toast(isNew?'分享链接已生成':'范围已更新');openShare()}
     catch(e){btn.disabled=false;btn.textContent=label;toast(errMsg(e))}}}
 $('#shareM').addEventListener('click',e=>{if(e.target.id==='shareM')$('#shareM').classList.remove('on')});
 
@@ -668,7 +699,7 @@ async function loadShared(){const [id,k]=location.hash.slice(3).split('.');$('#s
   document.title=(j.title||'分享的导图')+' · 思路树';render();fit();$('#status').textContent=COL?'已连接，修改会自动同步':'只读查看';
   if(COL){histRender();startPoll();setTimeout(()=>askName(),400)}return true}
 function keepShared(){if(!SHARED)return;let mine={maps:[],cur:null};try{mine=JSON.parse(localStorage.getItem(KEY)||'null')||mine}catch(e){}
-  const m=JSON.parse(JSON.stringify(M()));m.id=uid();delete m.share;m.title+='（副本）';mine.maps.push(m);mine.cur=m.id;localStorage.setItem(KEY,JSON.stringify(mine));
+  const m=JSON.parse(JSON.stringify(M()));m.id=uid();delete m.share;delete m.shares;for(const n of Object.values(m.nodes))delete n.c;m.title+='（副本）';mine.maps.push(m);mine.cur=m.id;localStorage.setItem(KEY,JSON.stringify(mine));
   location.replace(location.pathname)}
 $('#bKeep').onclick=keepShared;$('#bHist2').onclick=()=>$('#bHist').click();
 $('#bHist').onclick=()=>{$('#hist').classList.toggle('hide');histRender()};
