@@ -180,7 +180,7 @@ svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stro
     <div id="dView"></div>
     <textarea id="dIn" hidden aria-label="详细内容" placeholder="写下详细内容。&#10;- 开头为列表，1. 开头为编号&#10;**加粗**，[文字](https://链接)"></textarea>
     <div class="tip">拖动节点可以自由摆放（按住 Alt 只拖这一个，不带下级）。拖动连线的端点，或节点两侧的圆形接头，放到另一个节点上即可改连；从右侧接头拉到空白处会新建子节点。自由摆放时连线会自动绕开节点，点“一键排版”恢复树形。<br>
-    <kbd>Tab</kbd> 子节点 · <kbd>Enter</kbd> 同级 · <kbd>Delete</kbd> 删除 · <kbd>空格</kbd> 展开/收起 · <kbd>F2</kbd> 改标题 · <kbd>Ctrl+Z</kbd> 撤销 · 拖动空白处平移，Ctrl+滚轮或双指缩放。<br>
+    <kbd>Tab</kbd> 子节点 · <kbd>Enter</kbd> 同级 · <kbd>Delete</kbd> 删除 · <kbd>空格</kbd> 展开/收起 · <kbd>F2</kbd> 改标题 · <kbd>Ctrl+Z</kbd> 撤销 · 滚轮缩放，按住空白处拖动平移。<br>
     内容保存在本浏览器中，换设备前请在菜单里导出 JSON 备份。</div>
   </div>
 </aside>
@@ -287,7 +287,12 @@ function placeNew(){const un=n=>n.pl===false;
   const hOf=n=>{const ks=n.o?kids(n.id).filter(un):[];const own=size(n).h;if(!ks.length)return own;return Math.max(own,ks.reduce((a,k)=>a+hOf(k)+VG,-VG))};
   const lay=(p)=>{const ks=kids(p.id).filter(un);if(!ks.length)return;const tot=ks.reduce((a,k)=>a+hOf(k)+VG,-VG);let y=p.y+22-tot/2;const x=p.x+size(p).w+HG;
     for(const k of ks){const h=hOf(k);k.x=Math.round(x);k.y=Math.round(y+h/2-size(k).h/2);delete k.pl;if(k.o)lay(k);y+=h+VG}};
-  for(const n of vis){const p=N(n.p);if(p&&!un(p))lay(p);else if(!p){delete n.pl}}}
+  for(const n of vis){if(!un(n))continue;const p=N(n.p);if(p&&!un(p)){const before=new Set(Object.values(M().nodes).filter(x=>!un(x)&&visible(x.id)).map(x=>x.id));lay(p);
+      const S=Object.values(M().nodes).filter(x=>visible(x.id)&&!un(x)&&!before.has(x.id));avoid(S,before)}else if(!p){delete n.pl}}}
+function avoid(S,othersIds){if(!S.length)return;const others=[...othersIds].map(N).filter(Boolean);const m=VG;
+  const hit=dy=>S.some(a=>{const sa=size(a);return others.some(b=>{const sb=size(b);return a.x<b.x+sb.w+m&&a.x+sa.w+m>b.x&&a.y+dy<b.y+sb.h+m&&a.y+dy+sa.h+m>b.y})});
+  if(!hit(0))return;const step=TH+VG;let best=null;for(let i=1;i<400;i++){for(const dy of [i*step/2,-i*step/2])if(!hit(dy)){best=dy;break}if(best!==null)break}
+  if(best!==null)for(const a of S)a.y=Math.round(a.y+best)}
 
 /* routing */
 function port(n,side){const s=size(n);return side==='out'?{x:n.x+s.w,y:n.y+22}:{x:n.x,y:n.y+22}}
@@ -377,8 +382,8 @@ async function del(){const s=N(sel);if(!s)return;if(!s.p&&roots().length<2&&Obje
   if(all.length>1&&!await ask(`删除“${s.t}”及其下属 ${all.length-1} 个节点？可以撤销。`))return;
   snap();const sib=kids(s.p),i=sib.findIndex(x=>x.id===s.id);for(const n of all)delete M().nodes[n.id];
   const rest=kids(s.p);sel=(rest[i]||rest[i-1]||N(s.p)||roots()[0])?.id;save();render()}
-function toggle(id,v){const n=N(id);if(!n||!kids(id).length)return;n.o=v===undefined?!n.o:v;save();anim();render()}
-function level(k){for(const n of Object.values(M().nodes))n.o=depth(n.id)<k;save();anim();render()}
+function toggle(id,v){const n=N(id);if(!n||!kids(id).length)return;n.o=v===undefined?!n.o:v;if(!n.o&&M().mode==='free')for(const d of subtree(id).slice(1))d.pl=false;save();anim();render()}
+function level(k){for(const n of Object.values(M().nodes))n.o=depth(n.id)<k;if(M().mode==='free')for(const n of Object.values(M().nodes))if(!visible(n.id))n.pl=false;save();anim();render()}
 function reparent(id,np){const n=N(id);np=np||null;if(!n||id===np)return false;if(np&&isDesc(np,id)){toast('不能连到自己的下级节点');return false}if((n.p||null)===np)return false;
   snap();materialize();n.p=np;n.k=nextK(np);if(np)N(np).o=true;return true}
 function anim(){world.classList.add('anim');setTimeout(()=>world.classList.remove('anim'),400)}
@@ -432,7 +437,7 @@ function endPointer(e){pts.delete(e.pointerId);if(!act)return;const a=act;act=nu
 vp.addEventListener('pointerup',endPointer);vp.addEventListener('pointercancel',endPointer);
 vp.addEventListener('dblclick',e=>{const o=e.target.closest('[data-open]');if(o){openViewer(o.dataset.open);return}const n=e.target.closest('.node');if(n){select(n.dataset.id);focusTitle()}});
 world.addEventListener('click',e=>{const t=e.target.closest('.tg');if(t){e.stopPropagation();toggle(t.dataset.t)}});
-vp.addEventListener('wheel',e=>{e.preventDefault();if(e.ctrlKey||e.metaKey)zoomAt(Math.exp(-e.deltaY*0.01),e.clientX,e.clientY);else{view.x-=e.shiftKey?e.deltaY:e.deltaX;view.y-=e.shiftKey?0:e.deltaY;applyView()}},{passive:false});
+vp.addEventListener('wheel',e=>{e.preventDefault();let d=e.deltaY||e.deltaX;if(e.deltaMode===1)d*=33;else if(e.deltaMode===2)d*=400;d=Math.max(-120,Math.min(120,d));zoomAt(Math.exp(-d*(e.ctrlKey?0.01:0.0018)),e.clientX,e.clientY)},{passive:false});
 let dc=0;
 addEventListener('dragenter',e=>{if([...(e.dataTransfer?.types||[])].includes('Files')){dc++;$('#drophint').classList.add('on')}});
 addEventListener('dragleave',()=>{dc=Math.max(0,dc-1);if(!dc)$('#drophint').classList.remove('on')});
